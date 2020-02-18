@@ -19,25 +19,6 @@ namespace HTC.PackagesBootstrapper.Editor.System
         {
             ReadTimestampFile();
             EditorApplication.update += Update;
-
-            /*
-            Assembly[] assemblies = System.AppDomain.CurrentDomain.GetAssemblies();
-            foreach (Assembly assembly in assemblies)
-            {
-                System.Type[] types = assembly.GetTypes();
-                foreach (Type type in types)
-                {
-                    if (type.IsSubclassOf(typeof(EditorWindow)))
-                    {
-                        if (type.Name == "PackageManagerWindow")
-                        {
-                            MethodInfo method = type.GetMethod("OpenPackageManager", BindingFlags.ExactBinding);
-                            Debug.Log(method);
-                        }
-                    }
-                }
-            }
-            */
         }
 
         private static void Update()
