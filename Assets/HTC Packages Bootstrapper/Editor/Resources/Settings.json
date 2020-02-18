@@ -1,0 +1,11 @@
+{
+    "projectManifestPath": "Packages/manifest.json",
+    "checkIntervalSeconds": 43200,
+    "registry": {
+        "name": "HTC",
+        "url": "http://localhost:4873",
+        "scopes": [
+            "com.htc"
+        ]
+    }
+}

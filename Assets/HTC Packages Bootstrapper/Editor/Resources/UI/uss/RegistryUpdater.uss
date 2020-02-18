@@ -1,0 +1,28 @@
+:root {
+	padding: 5px;
+	background-color: #CFD1D2;
+}
+
+.title {
+	font-size: 14px;
+	-unity-font-style: bold;
+	-unity-text-align: middle-center;
+	padding-top: 10px;
+}
+
+.content {
+	padding: 10px;
+	flex-grow: 1;
+}
+
+.body {
+	white-space: normal;
+}
+
+#logo {
+	--unity-image: url("/Assets/HTC Packages Bootstrapper/Editor/Resources/HTC.jpg");
+}
+
+#confirm {
+
+}
