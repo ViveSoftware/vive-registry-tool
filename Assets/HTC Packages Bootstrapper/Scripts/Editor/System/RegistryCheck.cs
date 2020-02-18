@@ -11,7 +11,7 @@ namespace HTC.PackagesBootstrapper.Editor.System
     [InitializeOnLoad]
     public class RegistryCheck
     {
-        private const string LastCheckTimestampPath = ".HTCRegistryLastCheckTimestamp";
+        private const string LastCheckTimestampPath = "Temp/.HTCRegistryLastCheckTimestamp";
 
         private static DateTime LastCheckTimestamp;
 
