@@ -1,18 +1,29 @@
 :root {
 	padding: 5px;
 	background-color: #CFD1D2;
+	flex-direction: row;
+}
+
+.left-column {
+	align-items: center;
+	flex-grow: 1;
+	flex-shrink: 1;
+	padding: 5px;
+}
+
+.right-column {
+	flex-grow: 2;
+	flex-shrink: 3;
+	padding: 5px;
 }
 
 .title {
 	font-size: 14px;
 	-unity-font-style: bold;
-	-unity-text-align: middle-center;
-	padding-top: 10px;
 }
 
 .content {
-	padding: 10px;
-	flex-grow: 1;
+
 }
 
 .body {
@@ -24,5 +35,7 @@
 }
 
 #confirm {
-
+	width: 80px;
+	align-self: flex-end;
+	margin-top: 10px;
 }

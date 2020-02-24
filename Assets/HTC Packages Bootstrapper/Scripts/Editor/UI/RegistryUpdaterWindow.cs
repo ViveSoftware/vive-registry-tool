@@ -10,7 +10,7 @@ namespace HTC.PackagesBootstrapper.Editor.UI
 {
     public class RegistryUpdaterWindow : EditorWindow
     {
-        private static Vector2 WindowSize = new Vector2(250.0f, 320.0f);
+        private static Vector2 WindowSize = new Vector2(400.0f, 140.0f);
 
         [MenuItem("Tools/HTC/HTC Package Bootstrapper")]
         public static void Open()

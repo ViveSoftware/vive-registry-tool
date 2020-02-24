@@ -1,9 +1,13 @@
 <UXML xmlns="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
-  <Image name="logo" />
-  <Label class="title" text="HTC Packages Bootstrapper" />
-  <VisualElement class="content">
-    <Label class="body" text="Do you want to add HTC's package registry URL to your Unity package manager?" />
-    <Label class="body" text="So you can find and import any package from HTC in your package manager later." />
+  <VisualElement class="left-column">
+    <Image name="logo" />
   </VisualElement>
-  <Button name="confirm" text="Yes" />
+  <VisualElement class="right-column">
+    <Label class="title" text="HTC Packages Bootstrapper" />
+    <VisualElement class="content">
+      <Label class="body" text="Do you want to add HTC's package registry URL to your Unity package manager?" />
+      <Label class="body" text="So you can find and import any package from HTC in your package manager later." />
+    </VisualElement>
+    <Button name="confirm" text="Yes" />
+  </VisualElement>
 </UXML>
