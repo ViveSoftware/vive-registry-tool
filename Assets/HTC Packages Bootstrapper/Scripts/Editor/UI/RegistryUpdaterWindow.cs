@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 using HTC.PackagesBootstrapper.Editor.System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -11,6 +13,7 @@ namespace HTC.PackagesBootstrapper.Editor.UI
     public class RegistryUpdaterWindow : EditorWindow
     {
         private static Vector2 WindowSize = new Vector2(400.0f, 140.0f);
+        private static MethodInfo ShowPackageManagerMethodInfo;
 
         [MenuItem("Tools/HTC/HTC Package Bootstrapper")]
         public static void Open()
@@ -19,6 +22,45 @@ namespace HTC.PackagesBootstrapper.Editor.UI
             window.minSize = WindowSize;
             window.maxSize = WindowSize;
             window.Show();
+
+            InitOpenPackageManagerMethod();
+        }
+
+        public static void ShowPackageManager()
+        {
+            if (ShowPackageManagerMethodInfo == null)
+            {
+                Debug.LogWarning("Show package manager method hasn't been initialized properly.");
+                return;
+            }
+
+            ShowPackageManagerMethodInfo.Invoke(null, new object[]
+            {
+                new MenuCommand(null),
+            });
+        }
+
+        private static void InitOpenPackageManagerMethod()
+        {
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            foreach (Assembly assembly in assemblies)
+            {
+                Type[] types = assembly.GetTypes();
+                foreach (Type type in types)
+                {
+                    if (type.Name == "PackageManagerWindow")
+                    {
+                        MethodInfo methodInfo = type.GetMethod("ShowPackageManagerWindow", BindingFlags.NonPublic | BindingFlags.Static);
+                        if (methodInfo != null)
+                        {
+                            ShowPackageManagerMethodInfo = methodInfo;
+                            return;
+                        }
+                    }
+                }
+            }
+
+            Debug.LogWarning("Couldn't find method \"ShowPackageManagerWindow\" in class \"PackageManagerWindow\".");
         }
 
         private void OnEnable()
@@ -37,6 +79,8 @@ namespace HTC.PackagesBootstrapper.Editor.UI
         {
             UpdateRegistryToManifest();
             Close();
+
+            ShowPackageManager();
         }
 
         private static void UpdateRegistryToManifest()
