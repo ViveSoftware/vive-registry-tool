@@ -17,25 +17,50 @@
 	padding: 5px;
 }
 
-.title {
-	font-size: 14px;
-	-unity-font-style: bold;
-}
-
-.content {
-
+.content Label {
+	padding: 2px 0px;
 }
 
 .body {
 	white-space: normal;
 }
 
-#logo {
-	--unity-image: url("/Assets/HTC Packages Bootstrapper/Editor/Resources/HTC.jpg");
+.status-set {
+	flex-grow: 3;
+	flex-direction: row;
+	align-content: flex-end;
+	justify-content: space-around;
 }
 
-#confirm {
-	width: 80px;
+.status {
+	flex-grow: 1;
+	align-self: center;
+}
+
+.status-set .title {
+	-unity-font-style: bold;
+}
+
+.status-set .value {
+	padding: 2px;
+}
+
+.options {
+	flex-grow: 1;
+	align-content: flex-end;
+	flex-direction: row;
+	justify-content: flex-end;
+}
+
+.buttons {
+	flex-direction: row;
+}
+
+.buttons Button {
+	flex-grow: 1;
 	align-self: flex-end;
-	margin-top: 10px;
+}
+
+#logo {
+	--unity-image: url("/Assets/HTC Packages Bootstrapper/Editor/Resources/HTC.jpg");
 }

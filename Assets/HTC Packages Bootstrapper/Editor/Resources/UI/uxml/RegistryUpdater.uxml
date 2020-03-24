@@ -3,11 +3,27 @@
     <Image name="logo" />
   </VisualElement>
   <VisualElement class="right-column">
-    <Label class="title" text="HTC Packages Bootstrapper" />
     <VisualElement class="content">
       <Label class="body" text="Do you want to add HTC's package registry URL to your Unity package manager?" />
       <Label class="body" text="So you can find and import any package from HTC in your package manager later." />
     </VisualElement>
-    <Button name="confirm" text="Yes" />
+    <VisualElement class="status-set">
+      <VisualElement class="status">
+        <Label class="title" text="Registry URL:" />
+        <Label class="value" text="Added" name="RegistryStatusValue" />
+      </VisualElement>
+      <VisualElement class="status">
+        <Label class="title" text="Connection:" />
+        <Label class="value" text="OK" name="ConnectionStatusValue" />
+      </VisualElement>
+    </VisualElement>
+    <VisualElement class="options">
+      <Toggle name="AutoCheck" text="Auto Check"/>
+    </VisualElement>
+    <VisualElement class="buttons">
+      <Button name="Add" text="Add" />
+      <Button name="Remove" text="Remove" />
+      <Button name="Close" text="Close" />
+    </VisualElement>
   </VisualElement>
 </UXML>

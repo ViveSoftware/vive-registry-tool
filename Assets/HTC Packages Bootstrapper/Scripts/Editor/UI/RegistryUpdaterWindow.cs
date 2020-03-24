@@ -12,12 +12,14 @@ namespace HTC.PackagesBootstrapper.Editor.UI
 {
     public class RegistryUpdaterWindow : EditorWindow
     {
-        private static Vector2 WindowSize = new Vector2(400.0f, 140.0f);
+        private static Vector2 WindowSize = new Vector2(400.0f, 200.0f);
         private static MethodInfo ShowPackageManagerMethodInfo;
 
         [MenuItem("Tools/HTC/HTC Package Bootstrapper")]
         public static void Open()
         {
+            // TODO: Update status
+
             RegistryUpdaterWindow window = GetWindow<RegistryUpdaterWindow>(true, "HTC Packages Bootstrapper");
             window.minSize = WindowSize;
             window.maxSize = WindowSize;
@@ -71,16 +73,31 @@ namespace HTC.PackagesBootstrapper.Editor.UI
             VisualTreeAsset template = Resources.Load<VisualTreeAsset>("UI/uxml/RegistryUpdater");
             template.CloneTree(rootVisualElement);
 
-            Button confirmButton = rootVisualElement.Query<Button>("confirm").First();
-            confirmButton.clickable.clicked += OnConfirmButtonClicked;
+            Button addButton = rootVisualElement.Query<Button>("Add").First();
+            addButton.clickable.clicked += OnAddButtonClicked;
+
+            Button removeButton = rootVisualElement.Query<Button>("Remove").First();
+            removeButton.clickable.clicked += OnRemoveButtonClicked;
+
+            Button closeButton = rootVisualElement.Query<Button>("Close").First();
+            closeButton.clickable.clicked += OnCloseButtonClicked;
         }
 
-        private void OnConfirmButtonClicked()
+        private void OnAddButtonClicked()
         {
             ManifestUtils.UpdateRegistryToManifest();
-            Close();
-
+            // TODO: Update status
             ShowPackageManager();
+        }
+
+        private void OnRemoveButtonClicked()
+        {
+            // TODO: Update status
+        }
+
+        private void OnCloseButtonClicked()
+        {
+            Close();
         }
     }
 }
