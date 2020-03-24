@@ -17,7 +17,7 @@ namespace HTC.PackagesBootstrapper.Editor.System
 
         static RegistryCheck()
         {
-            ReadTimestampFile();
+            LastCheckTimestamp = ReadTimestampFile();
             EditorApplication.update += Update;
         }
 
@@ -29,55 +29,31 @@ namespace HTC.PackagesBootstrapper.Editor.System
                 return;
             }
 
-            if (!CheckRegistryExists())
+            if (!ManifestUtils.CheckRegistryExists())
             {
                 RegistryUpdaterWindow.Open();
             }
 
-            WriteTimestampFileNow();
-        }
-
-        private static bool CheckRegistryExists()
-        {
-            JObject manifestJson = Settings.Instance().LoadProjectManifest();
-            if (!manifestJson.ContainsKey("scopedRegistries"))
-            {
-                return false;
-            }
-
-            IList<JToken> registries = (IList<JToken>) manifestJson["scopedRegistries"];
-            foreach (JToken registryToken in registries)
-            {
-                Settings.RegistryInfo registry = JsonConvert.DeserializeObject<Settings.RegistryInfo>(registryToken.ToString());
-                if (Settings.Instance().Registry.Equals(registry))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private static void WriteTimestampFileNow()
-        {
             LastCheckTimestamp = DateTime.UtcNow;
-
-            long timestamp = LastCheckTimestamp.Ticks;
-            File.WriteAllText(LastCheckTimestampPath, timestamp.ToString());
+            WriteTimestampFile(LastCheckTimestamp);
         }
 
-        private static void ReadTimestampFile()
+        private static void WriteTimestampFile(DateTime dateTime)
+        {
+            File.WriteAllText(LastCheckTimestampPath, dateTime.Ticks.ToString());
+        }
+
+        private static DateTime ReadTimestampFile()
         {
             if (!File.Exists(LastCheckTimestampPath))
             {
-                LastCheckTimestamp = new DateTime();
-                return;
+                return new DateTime();
             }
 
             string timestampString = File.ReadAllText(LastCheckTimestampPath);
             long seconds = long.Parse(timestampString);
 
-            LastCheckTimestamp = new DateTime(seconds, DateTimeKind.Utc);
+            return new DateTime(seconds, DateTimeKind.Utc);
         }
     }
 }

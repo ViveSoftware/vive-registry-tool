@@ -77,38 +77,10 @@ namespace HTC.PackagesBootstrapper.Editor.UI
 
         private void OnConfirmButtonClicked()
         {
-            UpdateRegistryToManifest();
+            ManifestUtils.UpdateRegistryToManifest();
             Close();
 
             ShowPackageManager();
-        }
-
-        private static void UpdateRegistryToManifest()
-        {
-            JObject manifestJson = Settings.Instance().LoadProjectManifest();
-            if (!manifestJson.ContainsKey("scopedRegistries"))
-            {
-                manifestJson.Add("scopedRegistries", new JArray());
-            }
-
-            IList<JToken> registries = (IList<JToken>) manifestJson["scopedRegistries"];
-
-            // Remove all old registries from HTC
-            for (int i = registries.Count - 1; i >= 0 ; i--)
-            {
-                JToken registryToken = registries[i];
-                Settings.RegistryInfo registry = JsonConvert.DeserializeObject<Settings.RegistryInfo>(registryToken.ToString());
-                if (registry.Name == Settings.Instance().Registry.Name)
-                {
-                    registries.RemoveAt(i);
-                }
-            }
-
-            // Add registry
-            JToken newToken = JToken.Parse(JsonConvert.SerializeObject(Settings.Instance().Registry));
-            registries.Add(newToken);
-            
-            Settings.Instance().WriteProjectManifest(manifestJson.ToString());
         }
     }
 }

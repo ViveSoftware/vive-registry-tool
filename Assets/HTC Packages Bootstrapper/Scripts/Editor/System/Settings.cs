@@ -71,18 +71,5 @@ namespace HTC.PackagesBootstrapper.Editor.System
 
             return PrivateInstance;
         }
-
-        public JObject LoadProjectManifest()
-        {
-            string manifestString = File.ReadAllText(ProjectManifestPath);
-            JObject manifestJson = JObject.Parse(manifestString);
-
-            return manifestJson;
-        }
-
-        public void WriteProjectManifest(string content)
-        {
-            File.WriteAllText(ProjectManifestPath, content);
-        }
     }
 }
