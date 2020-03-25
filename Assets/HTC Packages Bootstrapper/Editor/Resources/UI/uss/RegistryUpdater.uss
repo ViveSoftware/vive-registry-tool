@@ -66,9 +66,9 @@
 }
 
 .success {
-	color: green;
+	color: #008000;
 }
 
 .error {
-	color: red;
+	color: #ff0000;
 }

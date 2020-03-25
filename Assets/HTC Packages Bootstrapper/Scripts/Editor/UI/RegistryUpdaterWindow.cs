@@ -21,7 +21,7 @@ namespace HTC.PackagesBootstrapper.Editor.UI
         private static readonly string ConnectionStatusSuccessString = "OK";
         private static readonly string ConnectionStatusErrorString = "Error";
 
-        private static MethodInfo ShowPackageManagerMethodInfo;
+        private static MethodInfo ShowPackageManagerMethodInfo = null;
         
         private Toggle AutoCheckToggle;
         private Label RegistryStatusLabel;
@@ -43,13 +43,17 @@ namespace HTC.PackagesBootstrapper.Editor.UI
         {
             if (ShowPackageManagerMethodInfo == null)
             {
-                Debug.LogWarning("\"ShowPackageManagerMethodInfo\" hasn't been initialized properly.");
                 return;
             }
 
             ShowPackageManagerMethodInfo.Invoke(null, new object[]
             {
+#if UNITY_2019_2
                 new MenuCommand(null),
+#endif
+#if UNITY_2019_3_OR_NEWER
+                "",
+#endif
             });
         }
 
@@ -63,7 +67,13 @@ namespace HTC.PackagesBootstrapper.Editor.UI
                 {
                     if (type.Name == "PackageManagerWindow")
                     {
-                        MethodInfo methodInfo = type.GetMethod("ShowPackageManagerWindow", BindingFlags.NonPublic | BindingFlags.Static);
+                        MethodInfo methodInfo = null;
+#if UNITY_2019_2
+                        methodInfo = type.GetMethod("ShowPackageManagerWindow", BindingFlags.NonPublic | BindingFlags.Static);
+#endif
+#if UNITY_2019_3_OR_NEWER
+                        methodInfo = type.GetMethod("OpenPackageManager", BindingFlags.NonPublic | BindingFlags.Static);
+#endif
                         if (methodInfo != null)
                         {
                             ShowPackageManagerMethodInfo = methodInfo;
@@ -72,8 +82,6 @@ namespace HTC.PackagesBootstrapper.Editor.UI
                     }
                 }
             }
-
-            Debug.LogWarning("Couldn't find method \"ShowPackageManagerWindow\" in class \"PackageManagerWindow\".");
         }
 
         private void OnEnable()
@@ -179,7 +187,7 @@ namespace HTC.PackagesBootstrapper.Editor.UI
                     return true;
                 }
             }
-            catch (Exception e)
+            catch
             {
                 return false;
             }
