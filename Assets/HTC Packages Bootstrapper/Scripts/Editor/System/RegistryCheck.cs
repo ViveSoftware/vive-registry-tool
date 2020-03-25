@@ -1,8 +1,6 @@
-﻿using HTC.PackagesBootstrapper.Editor.UI;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using HTC.PackagesBootstrapper.Editor.Configs;
+using HTC.PackagesBootstrapper.Editor.UI;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 
@@ -13,17 +11,17 @@ namespace HTC.PackagesBootstrapper.Editor.System
     {
         private const string LastCheckTimestampPath = "Temp/.HTCRegistryLastCheckTimestamp";
 
-        private static DateTime LastCheckTimestamp;
-
         static RegistryCheck()
         {
-            LastCheckTimestamp = ReadTimestampFile();
-            EditorApplication.update += Update;
+            if (UserSettings.Instance().AutoCheckEnabled)
+            {
+                EditorApplication.update += Update;
+            }
         }
 
         private static void Update()
         {
-            double elapsedSeconds = (DateTime.UtcNow - LastCheckTimestamp).TotalSeconds;
+            double elapsedSeconds = (DateTime.UtcNow - UserSettings.Instance().GetLastCheckTime()).TotalSeconds;
             if (elapsedSeconds < Settings.Instance().CheckIntervalSeconds)
             {
                 return;
@@ -34,26 +32,7 @@ namespace HTC.PackagesBootstrapper.Editor.System
                 RegistryUpdaterWindow.Open();
             }
 
-            LastCheckTimestamp = DateTime.UtcNow;
-            WriteTimestampFile(LastCheckTimestamp);
-        }
-
-        private static void WriteTimestampFile(DateTime dateTime)
-        {
-            File.WriteAllText(LastCheckTimestampPath, dateTime.Ticks.ToString());
-        }
-
-        private static DateTime ReadTimestampFile()
-        {
-            if (!File.Exists(LastCheckTimestampPath))
-            {
-                return new DateTime();
-            }
-
-            string timestampString = File.ReadAllText(LastCheckTimestampPath);
-            long seconds = long.Parse(timestampString);
-
-            return new DateTime(seconds, DateTimeKind.Utc);
+            UserSettings.Instance().SetLastCheckTimestamp(DateTime.UtcNow);
         }
     }
 }

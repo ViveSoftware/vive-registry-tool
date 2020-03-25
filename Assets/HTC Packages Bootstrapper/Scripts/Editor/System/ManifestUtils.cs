@@ -1,9 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+﻿using HTC.PackagesBootstrapper.Editor.Configs;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using UnityEngine;
+using System.Collections.Generic;
+using System.IO;
+using UnityEditor;
 
 namespace HTC.PackagesBootstrapper.Editor.System
 {
@@ -33,14 +33,35 @@ namespace HTC.PackagesBootstrapper.Editor.System
         public static void UpdateRegistryToManifest()
         {
             JObject manifestJson = LoadProjectManifest();
+            RemoveRegistry(manifestJson);
             if (!manifestJson.ContainsKey("scopedRegistries"))
             {
                 manifestJson.Add("scopedRegistries", new JArray());
             }
 
+            // Add registry
             IList<JToken> registries = (IList<JToken>) manifestJson["scopedRegistries"];
+            JToken newToken = JToken.Parse(JsonConvert.SerializeObject(Settings.Instance().Registry));
+            registries.Add(newToken);
+            
+            SaveProjectManifest(manifestJson.ToString());
+        }
 
-            // Remove all old registries from HTC
+        public static void RemoveRegistryFromManifest()
+        {
+            JObject manifestJson = LoadProjectManifest();
+            RemoveRegistry(manifestJson);
+            SaveProjectManifest(manifestJson.ToString());
+        }
+
+        private static void RemoveRegistry(JObject json)
+        {
+            if (!json.ContainsKey("scopedRegistries"))
+            {
+                return;
+            }
+
+            IList<JToken> registries = (IList<JToken>) json["scopedRegistries"];
             for (int i = registries.Count - 1; i >= 0 ; i--)
             {
                 JToken registryToken = registries[i];
@@ -50,12 +71,6 @@ namespace HTC.PackagesBootstrapper.Editor.System
                     registries.RemoveAt(i);
                 }
             }
-
-            // Add registry
-            JToken newToken = JToken.Parse(JsonConvert.SerializeObject(Settings.Instance().Registry));
-            registries.Add(newToken);
-            
-            WriteProjectManifest(manifestJson.ToString());
         }
 
         private static JObject LoadProjectManifest()
@@ -66,7 +81,7 @@ namespace HTC.PackagesBootstrapper.Editor.System
             return manifestJson;
         }
 
-        private static void WriteProjectManifest(string content)
+        private static void SaveProjectManifest(string content)
         {
             File.WriteAllText(Settings.Instance().ProjectManifestPath, content);
         }

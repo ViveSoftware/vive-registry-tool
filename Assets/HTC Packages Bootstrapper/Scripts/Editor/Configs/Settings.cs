@@ -1,11 +1,10 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-namespace HTC.PackagesBootstrapper.Editor.System
+namespace HTC.PackagesBootstrapper.Editor.Configs
 {
     public class Settings
     {
@@ -49,6 +48,9 @@ namespace HTC.PackagesBootstrapper.Editor.System
             }
         }
 
+        private const string FilePath = "Assets/HTC Packages Bootstrapper/Editor/Resources/Settings.json";
+        private static Settings PrivateInstance;
+
         [JsonProperty("projectManifestPath")]
         public string ProjectManifestPath;
 
@@ -58,15 +60,20 @@ namespace HTC.PackagesBootstrapper.Editor.System
         [JsonProperty("registry")]
         public RegistryInfo Registry;
 
-        private static Settings PrivateInstance;
-        private const string SettingsPath = "Settings";
-
         public static Settings Instance()
         {
             if (PrivateInstance == null)
             {
-                TextAsset settingsAsset = Resources.Load<TextAsset>(SettingsPath);
-                PrivateInstance = JsonConvert.DeserializeObject<Settings>(settingsAsset.ToString());
+                if (File.Exists(FilePath))
+                {
+                    string settingString = File.ReadAllText(FilePath);
+                    PrivateInstance = JsonConvert.DeserializeObject<Settings>(settingString);
+                }
+                else
+                {
+                    Debug.LogErrorFormat("Settings.json not found. ({0})", FilePath);
+                    PrivateInstance = new Settings();
+                }
             }
 
             return PrivateInstance;

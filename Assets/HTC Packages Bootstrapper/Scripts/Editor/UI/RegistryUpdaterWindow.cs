@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using HTC.PackagesBootstrapper.Editor.System;
+using System;
 using System.Reflection;
-using HTC.PackagesBootstrapper.Editor.System;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using HTC.PackagesBootstrapper.Editor.Configs;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -13,6 +11,7 @@ namespace HTC.PackagesBootstrapper.Editor.UI
     public class RegistryUpdaterWindow : EditorWindow
     {
         private static Vector2 WindowSize = new Vector2(400.0f, 200.0f);
+        private static Toggle AutoCheckToggle;
         private static MethodInfo ShowPackageManagerMethodInfo;
 
         [MenuItem("Tools/HTC/HTC Package Bootstrapper")]
@@ -73,6 +72,10 @@ namespace HTC.PackagesBootstrapper.Editor.UI
             VisualTreeAsset template = Resources.Load<VisualTreeAsset>("UI/uxml/RegistryUpdater");
             template.CloneTree(rootVisualElement);
 
+            AutoCheckToggle = rootVisualElement.Query<Toggle>("AutoCheck").First();
+            AutoCheckToggle.RegisterCallback<MouseUpEvent>(OnAutoCheckToggled);
+            AutoCheckToggle.value = UserSettings.Instance().AutoCheckEnabled;
+
             Button addButton = rootVisualElement.Query<Button>("Add").First();
             addButton.clickable.clicked += OnAddButtonClicked;
 
@@ -81,6 +84,11 @@ namespace HTC.PackagesBootstrapper.Editor.UI
 
             Button closeButton = rootVisualElement.Query<Button>("Close").First();
             closeButton.clickable.clicked += OnCloseButtonClicked;
+        }
+
+        private void OnAutoCheckToggled(MouseUpEvent mouseUpEvent)
+        {
+            UserSettings.Instance().SetAutoCheckEnabled(AutoCheckToggle.value);
         }
 
         private void OnAddButtonClicked()
@@ -93,6 +101,10 @@ namespace HTC.PackagesBootstrapper.Editor.UI
         private void OnRemoveButtonClicked()
         {
             // TODO: Update status
+
+            ManifestUtils.RemoveRegistryFromManifest();
+            UserSettings.Instance().SetAutoCheckEnabled(false);
+            AutoCheckToggle.value = false;
         }
 
         private void OnCloseButtonClicked()
