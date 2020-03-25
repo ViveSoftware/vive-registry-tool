@@ -1,6 +1,9 @@
 ﻿using HTC.PackagesBootstrapper.Editor.System;
 using System;
+using System.Management.Instrumentation;
+using System.Net.Sockets;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using HTC.PackagesBootstrapper.Editor.Configs;
 using UnityEditor;
 using UnityEngine;
@@ -10,19 +13,28 @@ namespace HTC.PackagesBootstrapper.Editor.UI
 {
     public class RegistryUpdaterWindow : EditorWindow
     {
-        private static Vector2 WindowSize = new Vector2(400.0f, 200.0f);
-        private static Toggle AutoCheckToggle;
+        private static readonly Vector2 WindowSize = new Vector2(400.0f, 200.0f);
+        private static readonly string StatusSuccessClass = "success";
+        private static readonly string StatusErrorClass = "error";
+        private static readonly string RegistryStatusSuccessString = "Added";
+        private static readonly string RegistryStatusErrorString = "Not Added";
+        private static readonly string ConnectionStatusSuccessString = "OK";
+        private static readonly string ConnectionStatusErrorString = "Error";
+
         private static MethodInfo ShowPackageManagerMethodInfo;
+        
+        private Toggle AutoCheckToggle;
+        private Label RegistryStatusLabel;
+        private Label ConnectionStatusLabel;
 
         [MenuItem("Tools/HTC/HTC Package Bootstrapper")]
         public static void Open()
         {
-            // TODO: Update status
-
             RegistryUpdaterWindow window = GetWindow<RegistryUpdaterWindow>(true, "HTC Packages Bootstrapper");
             window.minSize = WindowSize;
             window.maxSize = WindowSize;
             window.Show();
+            window.UpdateAllStatus();
 
             InitOpenPackageManagerMethod();
         }
@@ -31,7 +43,7 @@ namespace HTC.PackagesBootstrapper.Editor.UI
         {
             if (ShowPackageManagerMethodInfo == null)
             {
-                Debug.LogWarning("Show package manager method hasn't been initialized properly.");
+                Debug.LogWarning("\"ShowPackageManagerMethodInfo\" hasn't been initialized properly.");
                 return;
             }
 
@@ -76,6 +88,9 @@ namespace HTC.PackagesBootstrapper.Editor.UI
             AutoCheckToggle.RegisterCallback<MouseUpEvent>(OnAutoCheckToggled);
             AutoCheckToggle.value = UserSettings.Instance().AutoCheckEnabled;
 
+            RegistryStatusLabel = rootVisualElement.Query<Label>("RegistryStatusLabel").First();
+            ConnectionStatusLabel = rootVisualElement.Query<Label>("ConnectionStatusLabel").First();
+
             Button addButton = rootVisualElement.Query<Button>("Add").First();
             addButton.clickable.clicked += OnAddButtonClicked;
 
@@ -94,22 +109,80 @@ namespace HTC.PackagesBootstrapper.Editor.UI
         private void OnAddButtonClicked()
         {
             ManifestUtils.UpdateRegistryToManifest();
-            // TODO: Update status
             ShowPackageManager();
+            UpdateAllStatus();
         }
 
         private void OnRemoveButtonClicked()
         {
-            // TODO: Update status
-
             ManifestUtils.RemoveRegistryFromManifest();
             UserSettings.Instance().SetAutoCheckEnabled(false);
             AutoCheckToggle.value = false;
+            UpdateAllStatus();
         }
 
         private void OnCloseButtonClicked()
         {
             Close();
+        }
+
+        private void UpdateAllStatus()
+        {
+            UpdateRegistryStatus();
+            UpdateConnectionStatus();
+        }
+
+        private void UpdateRegistryStatus()
+        {
+            RegistryStatusLabel.RemoveFromClassList(StatusSuccessClass);
+            RegistryStatusLabel.RemoveFromClassList(StatusErrorClass);
+
+            if (ManifestUtils.CheckRegistryExists())
+            {
+                RegistryStatusLabel.AddToClassList(StatusSuccessClass);
+                RegistryStatusLabel.text = RegistryStatusSuccessString;
+            }
+            else
+            {
+                RegistryStatusLabel.AddToClassList(StatusErrorClass);
+                RegistryStatusLabel.text = RegistryStatusErrorString;
+            }
+        }
+
+        private void UpdateConnectionStatus()
+        {
+            ConnectionStatusLabel.RemoveFromClassList(StatusSuccessClass);
+            ConnectionStatusLabel.RemoveFromClassList(StatusErrorClass);
+
+            if (CheckRegistryConnection())
+            {
+                ConnectionStatusLabel.AddToClassList(StatusSuccessClass);
+                ConnectionStatusLabel.text = ConnectionStatusSuccessString;
+            }
+            else
+            {
+                ConnectionStatusLabel.AddToClassList(StatusErrorClass);
+                ConnectionStatusLabel.text = ConnectionStatusErrorString;
+            }
+        }
+
+        private bool CheckRegistryConnection()
+        {
+            string host = Settings.Instance().RegistryHost;
+            int port = Settings.Instance().RegistryPort;
+            
+            try
+            {
+                using (TcpClient client = new TcpClient())
+                {
+                    client.Connect(host, port);
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
         }
     }
 }

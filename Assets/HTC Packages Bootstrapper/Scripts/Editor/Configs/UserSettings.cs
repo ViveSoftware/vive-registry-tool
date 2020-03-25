@@ -1,7 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.IO;
-using Newtonsoft.Json;
-using UnityEngine;
 
 namespace HTC.PackagesBootstrapper.Editor.Configs
 {

@@ -1,7 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 namespace HTC.PackagesBootstrapper.Editor.Configs
@@ -60,6 +62,9 @@ namespace HTC.PackagesBootstrapper.Editor.Configs
         [JsonProperty("registry")]
         public RegistryInfo Registry;
 
+        public string RegistryHost;
+        public int RegistryPort;
+
         public static Settings Instance()
         {
             if (PrivateInstance == null)
@@ -74,9 +79,24 @@ namespace HTC.PackagesBootstrapper.Editor.Configs
                     Debug.LogErrorFormat("Settings.json not found. ({0})", FilePath);
                     PrivateInstance = new Settings();
                 }
+
+                PrivateInstance.Init();
             }
 
             return PrivateInstance;
+        }
+
+        private void Init()
+        {
+            Match match = Regex.Match(Registry.Url, @"^https?:\/\/(.+?)(?::(\d+))?\/?$");
+            RegistryHost = match.Groups[1].Value;
+
+            int port = 0;
+            RegistryPort = 80;
+            if (Int32.TryParse(match.Groups[2].Value, out port))
+            {
+                RegistryPort = port;
+            }
         }
     }
 }

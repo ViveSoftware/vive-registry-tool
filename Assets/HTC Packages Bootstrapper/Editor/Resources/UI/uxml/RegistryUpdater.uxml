@@ -10,11 +10,11 @@
     <VisualElement class="status-set">
       <VisualElement class="status">
         <Label class="title" text="Registry URL:" />
-        <Label class="value" text="Added" name="RegistryStatusValue" />
+        <Label class="value" text="Added" name="RegistryStatusLabel" />
       </VisualElement>
       <VisualElement class="status">
         <Label class="title" text="Connection:" />
-        <Label class="value" text="OK" name="ConnectionStatusValue" />
+        <Label class="value" text="OK" name="ConnectionStatusLabel" />
       </VisualElement>
     </VisualElement>
     <VisualElement class="options">

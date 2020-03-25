@@ -64,3 +64,11 @@
 #logo {
 	--unity-image: url("/Assets/HTC Packages Bootstrapper/Editor/Resources/HTC.jpg");
 }
+
+.success {
+	color: green;
+}
+
+.error {
+	color: red;
+}
