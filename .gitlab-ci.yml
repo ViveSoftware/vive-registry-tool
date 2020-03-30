@@ -6,13 +6,13 @@ variables:
   UNITY_COMMAND: "xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' /opt/Unity/Editor/Unity -batchmode -nographics -logfile /dev/stdout -quit"
   EXPORT_PACKAGE_PATH: 'Builds/HTCPackagesBootstrapper.unitypackage'
 
-.unity_activate: &unity_activate
-  - echo ${UNITY_LICENSE_2019_3_0} > /unity-license.ulf
-  - eval ${UNITY_COMMAND} -username "${UNITY_EMAIL}" -password "${UNITY_PASSWORD}" -manualLicenseFile /unity-license.ulf
-  - eval ${UNITY_COMMAND} -username "${UNITY_EMAIL}" -password "${UNITY_PASSWORD}"
+.unity_activate: &unity_activate |-
+  echo ${UNITY_LICENSE_2019_3_0} > /unity-license.ulf
+  eval ${UNITY_COMMAND} -username "${UNITY_EMAIL}" -password "${UNITY_PASSWORD}" -manualLicenseFile /unity-license.ulf
+  eval ${UNITY_COMMAND} -username "${UNITY_EMAIL}" -password "${UNITY_PASSWORD}"
 
-.unity_return_license: &unity_return_license
-  - eval ${UNITY_COMMAND} -returnLicense
+.unity_return_license: &unity_return_license |-
+  eval ${UNITY_COMMAND} -returnLicense
 
 .unity_job_template: &unity_job_template
   image: gableroux/unity3d:${IMAGE_TAG}
@@ -21,9 +21,9 @@ variables:
     - merge_requests
 
   script:
-    *unity_activate
+    - *unity_activate
     - echo 'hi'
-    *unity_return_license
+    - *unity_return_license
 
 export:unitypackage:
   <<: *unity_job_template
