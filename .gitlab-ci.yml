@@ -21,9 +21,10 @@ variables:
     - merge_requests
 
   script:
-    - *unity_activate
-    - echo 'hi'
-    - *unity_return_license
+    - echo ${UNITY_LICENSE_2019_3_0} > /unity-license.ulf
+    - eval ${UNITY_COMMAND} -username "${UNITY_EMAIL}" -password "${UNITY_PASSWORD}" -manualLicenseFile /unity-license.ulf
+    - eval ${UNITY_COMMAND} -username "${UNITY_EMAIL}" -password "${UNITY_PASSWORD}"
+    - eval ${UNITY_COMMAND} -returnLicense
 
 export:unitypackage:
   <<: *unity_job_template
