@@ -8,11 +8,11 @@ variables:
 
 .unity_activate: &unity_activate
   - echo ${UNITY_LICENSE_2019_3_0} > /unity-license.ulf
-  - ${UNITY_COMMAND} -username "${UNITY_EMAIL}" -password "${UNITY_PASSWORD}" -manualLicenseFile /unity-license.ulf
-  - ${UNITY_COMMAND}
+  - $(UNITY_COMMAND) -username "${UNITY_EMAIL}" -password "${UNITY_PASSWORD}" -manualLicenseFile /unity-license.ulf
+  - $(UNITY_COMMAND)
 
 .unity_return_license: &unity_return_license
-  - ${UNITY_COMMAND} -returnLicense
+  - $(UNITY_COMMAND) -returnLicense
 
 .unity_job_template: &unity_job_template
   image: gableroux/unity3d:${IMAGE_TAG}
