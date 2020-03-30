@@ -1,0 +1,55 @@
+stages:
+  - export
+  - build
+
+variables:
+  - EXPORT_PACKAGE_PATH: 'Builds/HTCPackagesBootstrapper.unitypackage'
+
+export:unitypackage:
+  <<: *unity_job_template
+  stage: export
+  image: gableroux/unity3d:2019.3.7f1-windows
+
+build:windows-2019.1:
+  <<: *unity_job_template
+  stage: build
+  variables:
+    - IMAGE_TAG: 2019.1.13f1-windows
+
+build:windows-2019.2:
+  <<: *unity_job_template
+  stage: build
+  variables:
+    - IMAGE_TAG: 2019.2.20f1-windows
+
+build:windows-2019.3:
+  <<: *unity_job_template
+  stage: build
+  variables:
+    - IMAGE_TAG: 2019.3.7f1-windows
+
+.unity_job_template: &unity_job_template
+  image: gableroux/unity3d:${IMAGE_TAG}
+  only:
+    - master
+    - merge_requests
+
+  before_script:
+    - *unity_activate
+
+  script:
+    - echo 'hi'
+
+  after_script:
+    - *unity_return_license
+
+.unity_activate: &unity_activate
+  - echo ${UNITY_LICENSE_2019_3_0} > /unity-license.ulf
+  - xvfb-run --auto-servernum --server-args='-screen 0 640x480x24'
+    /opt/Unity/Editor/Unity -batchmode -nographics -logfile /dev/stdout -quit
+    -username "${UNITY_EMAIL}" -password "${UNITY_PASSWORD}" -manualLicenseFile /unity-license.ulf
+
+.unity_return_license: &unity_return_license
+  - xvfb-run --auto-servernum --server-args='-screen 0 640x480x24'
+    /opt/Unity/Editor/Unity -batchmode -nographics -logFile /dev/stdout -quit
+    -returnLicense
