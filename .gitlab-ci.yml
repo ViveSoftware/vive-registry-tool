@@ -25,6 +25,7 @@ variables:
 
   script:
     - echo 'hi'
+    - eval ${UNITY_COMMAND} -username "${UNITY_EMAIL}" -password "${UNITY_PASSWORD}"
 
   after_script:
     *unity_return_license
