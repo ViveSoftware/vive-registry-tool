@@ -20,14 +20,9 @@ variables:
     - master
     - merge_requests
 
-  before_script:
-    *unity_activate
-
   script:
+    *unity_activate
     - echo 'hi'
-    - eval ${UNITY_COMMAND} -username "${UNITY_EMAIL}" -password "${UNITY_PASSWORD}"
-
-  after_script:
     *unity_return_license
 
 export:unitypackage:
