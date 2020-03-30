@@ -3,18 +3,16 @@ stages:
   - build
 
 variables:
+  UNITY_COMMAND: xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' /opt/Unity/Editor/Unity -batchmode -nographics -logfile /dev/stdout -quit
   EXPORT_PACKAGE_PATH: 'Builds/HTCPackagesBootstrapper.unitypackage'
 
 .unity_activate: &unity_activate
   - echo ${UNITY_LICENSE_2019_3_0} > /unity-license.ulf
-  - xvfb-run --auto-servernum --server-args='-screen 0 640x480x24'
-    /opt/Unity/Editor/Unity -batchmode -nographics -logfile /dev/stdout -quit
-    -username "${UNITY_EMAIL}" -password "${UNITY_PASSWORD}" -manualLicenseFile /unity-license.ulf
+  - ${UNITY_COMMAND} -username "${UNITY_EMAIL}" -password "${UNITY_PASSWORD}" -manualLicenseFile /unity-license.ulf
+  - ${UNITY_COMMAND}
 
 .unity_return_license: &unity_return_license
-  - xvfb-run --auto-servernum --server-args='-screen 0 640x480x24'
-    /opt/Unity/Editor/Unity -batchmode -nographics -logFile /dev/stdout -quit
-    -returnLicense
+  - ${UNITY_COMMAND} -returnLicense
 
 .unity_job_template: &unity_job_template
   image: gableroux/unity3d:${IMAGE_TAG}
