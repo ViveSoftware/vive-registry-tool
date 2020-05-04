@@ -7,13 +7,13 @@ stages:
 variables:
   UNITY_COMMAND: "xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' /opt/Unity/Editor/Unity -batchmode -nographics -logfile /dev/stdout -quit"
   EXPORT_PACKAGE_PATH: "Builds/HTCPackagesBootstrapper.unitypackage"
-  NEW_PROJECT_PATH: "./NewProject"
+  NEW_PROJECT_PATH: "/NewProject"
 
 .unity_activate: &unity_activate |-
-  eval ${UNITY_COMMAND} -username "${UNITY_EMAIL}" -password "${UNITY_PASSWORD}" -serial "${UNITY_SERIAL}"
+  eval ${UNITY_COMMAND} -username "${UNITY_EMAIL}" -password "${UNITY_PASSWORD}" -serial "${UNITY_SERIAL}" -createProject "${NEW_PROJECT_PATH}"
 
 .unity_return_license: &unity_return_license |-
-  eval ${UNITY_COMMAND} -returnLicense
+  eval ${UNITY_COMMAND} -returnLicense -projectPath "${NEW_PROJECT_PATH}"
 
 .unity_job_template: &unity_job_template
   image: gableroux/unity3d:${IMAGE_TAG}
@@ -21,16 +21,14 @@ variables:
     - master
     - merge_requests
 
-.unity_build_job_template: &unity_build_job_template
-  <<: *unity_job_template
   before_script:
-    - *unity_activate -createProject "${NEW_PROJECT_PATH}"
+    - *unity_activate
 
   script:
     - echo 'Hi'
   
   after_script:
-    - *unity_return_license -projectPath "${NEW_PROJECT_PATH}"
+    - *unity_return_license
 
 export:unitypackage:
   <<: *unity_job_template
@@ -38,26 +36,20 @@ export:unitypackage:
   variables:
     IMAGE_TAG: '2019.3.7f1-windows'
 
-  before_script:
-    - *unity_activate
-
-  after_script:
-    - *unity_return_license
-
 build:windows-2019.1:
-  <<: *unity_build_job_template
+  <<: *unity_job_template
   stage: build-2019.1
   variables:
     IMAGE_TAG: '2019.1.13f1-windows'
 
 build:windows-2019.2:
-  <<: *unity_build_job_template
+  <<: *unity_job_template
   stage: build-2019.2
   variables:
     IMAGE_TAG: '2019.2.20f1-windows'
 
 build:windows-2019.3:
-  <<: *unity_build_job_template
+  <<: *unity_job_template
   stage: build-2019.3
   variables:
     IMAGE_TAG: '2019.3.7f1-windows'
