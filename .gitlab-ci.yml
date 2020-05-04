@@ -1,6 +1,8 @@
 stages:
   - export
-  - build
+  - build-2019.1
+  - build-2019.2
+  - build-2019.3
 
 variables:
   UNITY_COMMAND: "xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' /opt/Unity/Editor/Unity -batchmode -nographics -logfile /dev/stdout -quit"
@@ -35,18 +37,18 @@ export:unitypackage:
 
 build:windows-2019.1:
   <<: *unity_job_template
-  stage: build
+  stage: build-2019.1
   variables:
     IMAGE_TAG: '2019.1.13f1-windows'
 
 build:windows-2019.2:
   <<: *unity_job_template
-  stage: build
+  stage: build-2019.2
   variables:
     IMAGE_TAG: '2019.2.20f1-windows'
 
 build:windows-2019.3:
   <<: *unity_job_template
-  stage: build
+  stage: build-2019.3
   variables:
     IMAGE_TAG: '2019.3.7f1-windows'
