@@ -8,7 +8,6 @@ variables:
 
 .unity_activate: &unity_activate |-
   echo ${UNITY_LICENSE_2019_3_0} > /unity-license.ulf
-  eval ${UNITY_COMMAND} -manualLicenseFile /unity-license.ulf
   eval ${UNITY_COMMAND} -username "${UNITY_EMAIL}" -password "${UNITY_PASSWORD}" -serial "${UNITY_SERIAL}"
 
 .unity_return_license: &unity_return_license |-
