@@ -1,6 +1,5 @@
 :root {
 	padding: 5px;
-	background-color: #CFD1D2;
 	flex-direction: row;
 }
 
