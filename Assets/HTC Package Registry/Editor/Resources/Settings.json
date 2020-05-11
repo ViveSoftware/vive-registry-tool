@@ -2,10 +2,10 @@
     "projectManifestPath": "Packages/manifest.json",
     "checkIntervalSeconds": 43200,
     "registry": {
-        "name": "HTC",
-        "url": "http://localhost:4873",
+        "name": "HTC Private",
+        "url": "http://tv01009052up.htctaipei.htc.com.tw:4873",
         "scopes": [
-            "com.htc"
+            "com.htc-private"
         ]
     }
 }

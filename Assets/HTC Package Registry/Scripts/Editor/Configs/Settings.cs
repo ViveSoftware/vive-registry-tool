@@ -50,7 +50,7 @@ namespace HTC.PackagesBootstrapper.Editor.Configs
             }
         }
 
-        private const string FilePath = "Assets/HTC Packages Bootstrapper/Editor/Resources/Settings.json";
+        private const string FilePath = "Assets/HTC Package Registry/Editor/Resources/Settings.json";
         private static Settings PrivateInstance;
 
         [JsonProperty("projectManifestPath")]

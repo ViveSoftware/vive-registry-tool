@@ -27,10 +27,10 @@ namespace HTC.PackagesBootstrapper.Editor.UI
         private Label RegistryStatusLabel;
         private Label ConnectionStatusLabel;
 
-        [MenuItem("Tools/HTC/HTC Package Bootstrapper")]
+        [MenuItem("Tools/HTC/HTC Package Registry")]
         public static void Open()
         {
-            RegistryUpdaterWindow window = GetWindow<RegistryUpdaterWindow>(true, "HTC Packages Bootstrapper");
+            RegistryUpdaterWindow window = GetWindow<RegistryUpdaterWindow>(true, "HTC Package Registry");
             window.minSize = WindowSize;
             window.maxSize = WindowSize;
             window.Show();
