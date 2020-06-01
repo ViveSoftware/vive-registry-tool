@@ -44,36 +44,49 @@ namespace HTC.PackagesBootstrapper.Editor.UI
         {
             if (ShowPackageManagerMethodInfo == null)
             {
+                Debug.LogWarning("ShowPackageManager() method hadn't been initialized properly. Please open package manager manually.");
                 return;
             }
 
-            ShowPackageManagerMethodInfo.Invoke(null, new object[]
+            try
             {
+                ShowPackageManagerMethodInfo.Invoke(null, new object[]
+                {
 #if UNITY_2019_2
                 new MenuCommand(null),
 #endif
 #if UNITY_2019_3_OR_NEWER
-                "",
+                    "",
 #endif
-            });
+                });
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
         }
 
         private static void InitOpenPackageManagerMethod()
         {
-            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            foreach (Assembly assembly in assemblies)
+            try
             {
-                Type[] types = assembly.GetTypes();
-                foreach (Type type in types)
+                Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+                foreach (Assembly assembly in assemblies)
                 {
+                    Type type = assembly.GetType("UnityEditor.PackageManager.UI.PackageManagerWindow");
+                    if (type == null)
+                    {
+                        continue;
+                    }
+
                     if (type.Name == "PackageManagerWindow")
                     {
                         MethodInfo methodInfo = null;
 #if UNITY_2019_2
-                        methodInfo = type.GetMethod("ShowPackageManagerWindow", BindingFlags.NonPublic | BindingFlags.Static);
+                        methodInfo = type.GetMethod("ShowPackageManagerWindow", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
 #endif
 #if UNITY_2019_3_OR_NEWER
-                        methodInfo = type.GetMethod("OpenPackageManager", BindingFlags.NonPublic | BindingFlags.Static);
+                        methodInfo = type.GetMethod("OpenPackageManager", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
 #endif
                         if (methodInfo != null)
                         {
@@ -82,6 +95,15 @@ namespace HTC.PackagesBootstrapper.Editor.UI
                         }
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
+
+            if (ShowPackageManagerMethodInfo == null)
+            {
+                Debug.LogWarning("ShowPackageManager() required method not found.");
             }
         }
 
