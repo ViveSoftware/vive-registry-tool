@@ -61,7 +61,7 @@
 }
 
 #logo {
-	--unity-image: url("/Assets/HTC Package Registry/Editor/Resources/HTC.jpg");
+	--unity-image: resource("HTC");
 }
 
 .success {

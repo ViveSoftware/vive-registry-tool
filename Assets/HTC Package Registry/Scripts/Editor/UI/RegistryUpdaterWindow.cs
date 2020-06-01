@@ -1,10 +1,8 @@
-﻿using HTC.PackagesBootstrapper.Editor.System;
+﻿using HTC.PackagesBootstrapper.Editor.Configs;
+using HTC.PackagesBootstrapper.Editor.System;
 using System;
-using System.Management.Instrumentation;
 using System.Net.Sockets;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using HTC.PackagesBootstrapper.Editor.Configs;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -22,12 +20,15 @@ namespace HTC.PackagesBootstrapper.Editor.UI
         private static readonly string ConnectionStatusErrorString = "Error";
 
         private static MethodInfo ShowPackageManagerMethodInfo = null;
+
+        [SerializeField] private StyleSheet UIStyle = null;
+        [SerializeField] private VisualTreeAsset UITemplate = null;
         
         private Toggle AutoCheckToggle;
         private Label RegistryStatusLabel;
         private Label ConnectionStatusLabel;
 
-        [MenuItem("Tools/HTC/HTC Package Registry")]
+        [MenuItem("Window/HTC Package Registry")]
         public static void Open()
         {
             RegistryUpdaterWindow window = GetWindow<RegistryUpdaterWindow>(true, "HTC Package Registry");
@@ -86,11 +87,8 @@ namespace HTC.PackagesBootstrapper.Editor.UI
 
         private void OnEnable()
         {
-            StyleSheet style = Resources.Load<StyleSheet>("UI/uss/RegistryUpdater");
-            rootVisualElement.styleSheets.Add(style);
-
-            VisualTreeAsset template = Resources.Load<VisualTreeAsset>("UI/uxml/RegistryUpdater");
-            template.CloneTree(rootVisualElement);
+            rootVisualElement.styleSheets.Add(UIStyle);
+            UITemplate.CloneTree(rootVisualElement);
 
             AutoCheckToggle = rootVisualElement.Query<Toggle>("AutoCheck").First();
             AutoCheckToggle.RegisterCallback<MouseUpEvent>(OnAutoCheckToggled);
