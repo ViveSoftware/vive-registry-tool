@@ -56,9 +56,6 @@ namespace HTC.PackagesBootstrapper.Editor.Configs
         [JsonProperty("projectManifestPath")]
         public string ProjectManifestPath;
 
-        [JsonProperty("checkIntervalSeconds")]
-        public double CheckIntervalSeconds;
-
         [JsonProperty("registry")]
         public RegistryInfo Registry;
 

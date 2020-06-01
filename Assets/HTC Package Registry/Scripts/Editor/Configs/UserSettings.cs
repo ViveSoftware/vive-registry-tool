@@ -1,16 +1,12 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.IO;
 
 namespace HTC.PackagesBootstrapper.Editor.Configs
 {
     public class UserSettings
     {
-        private const string FilePath = "Temp/HTCPackagesBootstrapperUserSettings.json";
+        private const string FilePath = "Temp/HTCPackageRegistryUserSettings.json";
         private static UserSettings PrivateInstance;
-
-        [JsonProperty]
-        public long LastCheckTimestamp = 0;
 
         [JsonProperty]
         public bool AutoCheckEnabled = true;
@@ -32,17 +28,6 @@ namespace HTC.PackagesBootstrapper.Editor.Configs
             }
 
             return PrivateInstance;
-        }
-
-        public DateTime GetLastCheckTime()
-        {
-            return new DateTime(LastCheckTimestamp, DateTimeKind.Utc);
-        }
-
-        public void SetLastCheckTimestamp(DateTime dateTime)
-        {
-            LastCheckTimestamp = dateTime.Ticks;
-            Save();
         }
 
         public void SetAutoCheckEnabled(bool enabled)

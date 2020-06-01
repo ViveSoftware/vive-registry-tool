@@ -1,6 +1,5 @@
 {
     "projectManifestPath": "Packages/manifest.json",
-    "checkIntervalSeconds": 43200,
     "registry": {
         "name": "HTC",
         "url": "http://10.220.20.216:4873/",
