@@ -79,20 +79,16 @@ namespace HTC.PackagesBootstrapper.Editor.UI
                         continue;
                     }
 
-                    if (type.Name == "PackageManagerWindow")
-                    {
-                        MethodInfo methodInfo = null;
-#if UNITY_2019_2
-                        methodInfo = type.GetMethod("ShowPackageManagerWindow", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
-#endif
+                    MethodInfo methodInfo = null;
 #if UNITY_2019_3_OR_NEWER
-                        methodInfo = type.GetMethod("OpenPackageManager", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+                    methodInfo = type.GetMethod("OpenPackageManager", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+#else
+                    methodInfo = type.GetMethod("ShowPackageManagerWindow", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
 #endif
-                        if (methodInfo != null)
-                        {
-                            ShowPackageManagerMethodInfo = methodInfo;
-                            return;
-                        }
+                    if (methodInfo != null)
+                    {
+                        ShowPackageManagerMethodInfo = methodInfo;
+                        return;
                     }
                 }
             }
