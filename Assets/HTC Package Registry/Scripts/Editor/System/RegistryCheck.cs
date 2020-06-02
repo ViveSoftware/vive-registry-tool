@@ -11,11 +11,18 @@ namespace HTC.PackagesBootstrapper.Editor.System
         {
             if (UserSettings.Instance().AutoCheckEnabled)
             {
-                if (!ManifestUtils.CheckRegistryExists())
-                {
-                    RegistryUpdaterWindow.Open();
-                }
+                EditorApplication.update += UpdateOnce;
             }
+        }
+
+        private static void UpdateOnce()
+        {
+            if (!ManifestUtils.CheckRegistryExists())
+            {
+                RegistryUpdaterWindow.Open();
+            }
+
+            EditorApplication.update -= UpdateOnce;
         }
     }
 }
