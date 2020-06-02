@@ -1,6 +1,6 @@
 ﻿using HTC.PackagesBootstrapper.Editor.Configs;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using HTC.Newtonsoft.Json;
+using HTC.Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
 

@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using HTC.Newtonsoft.Json;
 using System.IO;
 
 namespace HTC.PackagesBootstrapper.Editor.Configs
