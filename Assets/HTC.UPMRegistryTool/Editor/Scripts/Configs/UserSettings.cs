@@ -1,7 +1,7 @@
 ﻿using HTC.Newtonsoft.Json;
 using System.IO;
 
-namespace HTC.PackagesBootstrapper.Editor.Configs
+namespace HTC.UPMRegistryTool.Editor.Configs
 {
     public class UserSettings
     {

@@ -2,11 +2,10 @@
 using HTC.Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-namespace HTC.PackagesBootstrapper.Editor.Configs
+namespace HTC.UPMRegistryTool.Editor.Configs
 {
     public class Settings
     {
@@ -50,7 +49,7 @@ namespace HTC.PackagesBootstrapper.Editor.Configs
             }
         }
 
-        private const string FilePath = "Assets/HTC Package Registry/Editor/Resources/Settings.json";
+        private const string FilePath = "Settings";
         private static Settings PrivateInstance;
 
         [JsonProperty("projectManifestPath")]
@@ -66,9 +65,10 @@ namespace HTC.PackagesBootstrapper.Editor.Configs
         {
             if (PrivateInstance == null)
             {
-                if (File.Exists(FilePath))
+                TextAsset jsonAsset = Resources.Load<TextAsset>(FilePath);
+                if (jsonAsset)
                 {
-                    string settingString = File.ReadAllText(FilePath);
+                    string settingString = jsonAsset.ToString();
                     PrivateInstance = JsonConvert.DeserializeObject<Settings>(settingString);
                 }
                 else

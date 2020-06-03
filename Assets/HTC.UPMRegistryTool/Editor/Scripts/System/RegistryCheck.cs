@@ -1,8 +1,8 @@
-﻿using HTC.PackagesBootstrapper.Editor.Configs;
-using HTC.PackagesBootstrapper.Editor.UI;
+﻿using HTC.UPMRegistryTool.Editor.Configs;
+using HTC.UPMRegistryTool.Editor.UI;
 using UnityEditor;
 
-namespace HTC.PackagesBootstrapper.Editor.System
+namespace HTC.UPMRegistryTool.Editor.System
 {
     [InitializeOnLoad]
     public class RegistryCheck

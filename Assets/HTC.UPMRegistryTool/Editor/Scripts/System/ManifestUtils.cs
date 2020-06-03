@@ -1,10 +1,10 @@
-﻿using HTC.PackagesBootstrapper.Editor.Configs;
+﻿using HTC.UPMRegistryTool.Editor.Configs;
 using HTC.Newtonsoft.Json;
 using HTC.Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
 
-namespace HTC.PackagesBootstrapper.Editor.System
+namespace HTC.UPMRegistryTool.Editor.System
 {
     public static class ManifestUtils
     {

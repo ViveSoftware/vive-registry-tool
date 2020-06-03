@@ -1,5 +1,5 @@
-﻿using HTC.PackagesBootstrapper.Editor.Configs;
-using HTC.PackagesBootstrapper.Editor.System;
+﻿using HTC.UPMRegistryTool.Editor.Configs;
+using HTC.UPMRegistryTool.Editor.System;
 using System;
 using System.Net.Sockets;
 using System.Reflection;
@@ -7,7 +7,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace HTC.PackagesBootstrapper.Editor.UI
+namespace HTC.UPMRegistryTool.Editor.UI
 {
     public class RegistryUpdaterWindow : EditorWindow
     {
@@ -31,7 +31,7 @@ namespace HTC.PackagesBootstrapper.Editor.UI
         [MenuItem("Window/HTC Package Registry")]
         public static void Open()
         {
-            RegistryUpdaterWindow window = GetWindow<RegistryUpdaterWindow>(true, "HTC Package Registry");
+            RegistryUpdaterWindow window = GetWindow<RegistryUpdaterWindow>(true, "HTC UPM Registry Tool");
             window.minSize = WindowSize;
             window.maxSize = WindowSize;
             window.Show();
