@@ -2,9 +2,9 @@
     "projectManifestPath": "Packages/manifest.json",
     "registry": {
         "name": "HTC",
-        "url": "http://10.220.20.216:4873/",
+        "url": "https://npm-registry.vive.com",
         "scopes": [
-            "com.htc.explab"
+            "com.htc.upm"
         ]
     }
 }
