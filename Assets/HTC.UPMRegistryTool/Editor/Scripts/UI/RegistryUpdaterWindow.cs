@@ -28,7 +28,7 @@ namespace HTC.UPMRegistryTool.Editor.UI
         private Label RegistryStatusLabel;
         private Label ConnectionStatusLabel;
 
-        [MenuItem("Window/HTC Package Registry")]
+        [MenuItem("Window/HTC/HTC Package Registry")]
         public static void Open()
         {
             RegistryUpdaterWindow window = GetWindow<RegistryUpdaterWindow>(true, "HTC UPM Registry Tool");
@@ -52,11 +52,10 @@ namespace HTC.UPMRegistryTool.Editor.UI
             {
                 ShowPackageManagerMethodInfo.Invoke(null, new object[]
                 {
-#if UNITY_2019_2
-                new MenuCommand(null),
-#endif
 #if UNITY_2019_3_OR_NEWER
                     "",
+#else
+                new MenuCommand(null),
 #endif
                 });
             }
