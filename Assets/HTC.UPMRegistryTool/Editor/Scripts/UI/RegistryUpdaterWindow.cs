@@ -11,7 +11,7 @@ namespace HTC.UPMRegistryTool.Editor.UI
 {
     public class RegistryUpdaterWindow : EditorWindow
     {
-        private static readonly Vector2 WindowSize = new Vector2(400.0f, 200.0f);
+        private static readonly Vector2 WindowSize = new Vector2(520.0f, 360.0f);
         private static readonly string StatusSuccessClass = "success";
         private static readonly string StatusErrorClass = "error";
         private static readonly string RegistryStatusSuccessString = "Added";
@@ -25,17 +25,20 @@ namespace HTC.UPMRegistryTool.Editor.UI
         [SerializeField] private VisualTreeAsset UITemplate = null;
         
         private Toggle AutoCheckToggle;
+        private Toggle AcceptTermsToggle;
         private Label RegistryStatusLabel;
         private Label ConnectionStatusLabel;
+        private Button AddButton;
+        private Button RemoveButton;
 
-        [MenuItem("Window/HTC/HTC Package Registry")]
+        [MenuItem("Window/HTC/HTC Package Registry Tool")]
         public static void Open()
         {
             RegistryUpdaterWindow window = GetWindow<RegistryUpdaterWindow>(true, "HTC UPM Registry Tool");
             window.minSize = WindowSize;
             window.maxSize = WindowSize;
-            window.Show();
             window.UpdateAllStatus();
+            window.Show();
 
             InitOpenPackageManagerMethod();
         }
@@ -107,21 +110,47 @@ namespace HTC.UPMRegistryTool.Editor.UI
             rootVisualElement.styleSheets.Add(UIStyle);
             UITemplate.CloneTree(rootVisualElement);
 
+            Label registryUrlLabel = rootVisualElement.Query<Label>("RegistryUrlLabel").First();
+            registryUrlLabel.text = Settings.Instance().Registry.Url;
+
+            Label registryScopesLabel = rootVisualElement.Query<Label>("RegistryScopesLabel").First();
+            string strScopes = "";
+            foreach (string strScope in Settings.Instance().Registry.Scopes)
+            {
+                if (!string.IsNullOrEmpty(strScopes))
+                {
+                    strScopes += ", ";
+                }
+
+                strScopes += strScope;
+            }
+
+            registryScopesLabel.text = strScopes;
+
             AutoCheckToggle = rootVisualElement.Query<Toggle>("AutoCheck").First();
             AutoCheckToggle.RegisterCallback<MouseUpEvent>(OnAutoCheckToggled);
             AutoCheckToggle.value = UserSettings.Instance().AutoCheckEnabled;
 
+            AcceptTermsToggle = rootVisualElement.Query<Toggle>("AcceptTerms").First();
+            AcceptTermsToggle.RegisterCallback<MouseUpEvent>(OnAcceptTermsToggled);
+            AcceptTermsToggle.value = UserSettings.Instance().TermsAccepted;
+
             RegistryStatusLabel = rootVisualElement.Query<Label>("RegistryStatusLabel").First();
             ConnectionStatusLabel = rootVisualElement.Query<Label>("ConnectionStatusLabel").First();
 
-            Button addButton = rootVisualElement.Query<Button>("Add").First();
-            addButton.clickable.clicked += OnAddButtonClicked;
+            AddButton = rootVisualElement.Query<Button>("Add").First();
+            AddButton.clickable.clicked += OnAddButtonClicked;
+            UpdateAddButtonEnabled();
 
-            Button removeButton = rootVisualElement.Query<Button>("Remove").First();
-            removeButton.clickable.clicked += OnRemoveButtonClicked;
+            RemoveButton = rootVisualElement.Query<Button>("Remove").First();
+            RemoveButton.clickable.clicked += OnRemoveButtonClicked;
+            UpdateRemoveButtonEnabled();
 
             Button closeButton = rootVisualElement.Query<Button>("Close").First();
             closeButton.clickable.clicked += OnCloseButtonClicked;
+
+            Button termsButton = rootVisualElement.Query<Button>("Terms").First();
+            termsButton.clickable.clicked += OnTermsButtonClicked;
         }
 
         private void OnAutoCheckToggled(MouseUpEvent mouseUpEvent)
@@ -129,10 +158,18 @@ namespace HTC.UPMRegistryTool.Editor.UI
             UserSettings.Instance().SetAutoCheckEnabled(AutoCheckToggle.value);
         }
 
+        private void OnAcceptTermsToggled(MouseUpEvent mouseUpEvent)
+        {
+            UserSettings.Instance().SetTermsAccepted(AcceptTermsToggle.value);
+            UpdateAddButtonEnabled();
+        }
+
         private void OnAddButtonClicked()
         {
             ManifestUtils.UpdateRegistryToManifest();
             ShowPackageManager();
+            UpdateAddButtonEnabled();
+            UpdateRemoveButtonEnabled();
             UpdateAllStatus();
         }
 
@@ -141,12 +178,30 @@ namespace HTC.UPMRegistryTool.Editor.UI
             ManifestUtils.RemoveRegistryFromManifest();
             UserSettings.Instance().SetAutoCheckEnabled(false);
             AutoCheckToggle.value = false;
+            UpdateAddButtonEnabled();
+            UpdateRemoveButtonEnabled();
             UpdateAllStatus();
         }
 
         private void OnCloseButtonClicked()
         {
             Close();
+        }
+
+        private void OnTermsButtonClicked()
+        {
+            Application.OpenURL(Settings.Instance().TermsURL);
+        }
+
+        private void UpdateAddButtonEnabled()
+        {
+            bool enabled = UserSettings.Instance().TermsAccepted && !ManifestUtils.CheckRegistryExists();
+            AddButton.SetEnabled(enabled);
+        }
+
+        private void UpdateRemoveButtonEnabled()
+        {
+            RemoveButton.SetEnabled(ManifestUtils.CheckRegistryExists());
         }
 
         private void UpdateAllStatus()

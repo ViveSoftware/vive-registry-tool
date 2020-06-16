@@ -52,10 +52,13 @@ namespace HTC.UPMRegistryTool.Editor.Configs
         private const string FilePath = "Settings";
         private static Settings PrivateInstance;
 
-        [JsonProperty("projectManifestPath")]
+        [JsonProperty]
         public string ProjectManifestPath;
 
-        [JsonProperty("registry")]
+        [JsonProperty] 
+        public string TermsURL;
+
+        [JsonProperty]
         public RegistryInfo Registry;
 
         public string RegistryHost;

@@ -5,11 +5,14 @@ namespace HTC.UPMRegistryTool.Editor.Configs
 {
     public class UserSettings
     {
-        private const string FilePath = "Temp/HTCPackageRegistryUserSettings.json";
+        private const string FilePath = "Temp/HTCUPMRegistryToolUserSettings.json";
         private static UserSettings PrivateInstance;
 
         [JsonProperty]
         public bool AutoCheckEnabled = true;
+
+        [JsonProperty] 
+        public bool TermsAccepted = false;
 
         public static UserSettings Instance()
         {
@@ -33,6 +36,12 @@ namespace HTC.UPMRegistryTool.Editor.Configs
         public void SetAutoCheckEnabled(bool enabled)
         {
             AutoCheckEnabled = enabled;
+            Save();
+        }
+
+        public void SetTermsAccepted(bool accepted)
+        {
+            TermsAccepted = accepted;
             Save();
         }
 

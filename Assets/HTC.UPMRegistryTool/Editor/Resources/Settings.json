@@ -1,10 +1,11 @@
 {
-    "projectManifestPath": "Packages/manifest.json",
-    "registry": {
-        "name": "HTC",
-        "url": "https://npm-registry.vive.com",
-        "scopes": [
-            "com.htc.upm"
-        ]
-    }
+  "ProjectManifestPath": "Packages/manifest.json",
+  "TermsURL": "https://developer.vive.com/resources/knowledgebase/sdk-license-agreement-english-version/",
+  "Registry": {
+    "name": "HTC",
+    "url": "https://npm-registry.vive.com",
+    "scopes": [
+      "com.htc.upm"
+    ]
+  }
 }
