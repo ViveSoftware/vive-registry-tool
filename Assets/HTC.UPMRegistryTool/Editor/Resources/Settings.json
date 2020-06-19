@@ -1,6 +1,7 @@
 {
+  "RootFolderName": "HTC.UPMRegistryTool",
   "ProjectManifestPath": "Packages/manifest.json",
-  "TermsURL": "https://developer.vive.com/resources/knowledgebase/sdk-license-agreement-english-version/",
+  "LicenseFileName": "LICENSE.txt",
   "Registry": {
     "name": "HTC",
     "url": "https://npm-registry.vive.com",

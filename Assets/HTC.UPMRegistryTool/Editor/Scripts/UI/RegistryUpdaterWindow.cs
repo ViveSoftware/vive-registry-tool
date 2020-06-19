@@ -1,6 +1,7 @@
 ﻿using HTC.UPMRegistryTool.Editor.Configs;
 using HTC.UPMRegistryTool.Editor.System;
 using System;
+using System.IO;
 using System.Net.Sockets;
 using System.Reflection;
 using UnityEditor;
@@ -190,7 +191,16 @@ namespace HTC.UPMRegistryTool.Editor.UI
 
         private void OnTermsButtonClicked()
         {
-            Application.OpenURL(Settings.Instance().TermsURL);
+            string[] paths = Directory.GetDirectories("Assets/", Settings.Instance().RootFolderName, SearchOption.AllDirectories);
+            if (paths == null || paths.Length == 0)
+            {
+                Debug.LogWarning("Failed to find root folder of HTC UPM Registry Tool (" + Settings.Instance().RootFolderName + ")");
+                return;
+            }
+
+            string rootFolderPath = Path.GetFullPath(paths[0]);
+            string licenseFileURL = "file://" + rootFolderPath + "/" + Settings.Instance().LicenseFileName;
+            Application.OpenURL(licenseFileURL);
         }
 
         private void UpdateAddButtonEnabled()
