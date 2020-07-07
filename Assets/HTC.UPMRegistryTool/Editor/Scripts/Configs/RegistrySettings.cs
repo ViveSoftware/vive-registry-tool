@@ -1,13 +1,14 @@
 ﻿using HTC.Newtonsoft.Json;
 using HTC.Newtonsoft.Json.Serialization;
-using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text.RegularExpressions;
+using UnityEditor;
 using UnityEngine;
 
 namespace HTC.UPMRegistryTool.Editor.Configs
 {
-    public class Settings
+    public class RegistrySettings
     {
         public struct RegistryInfo
         {
@@ -49,17 +50,14 @@ namespace HTC.UPMRegistryTool.Editor.Configs
             }
         }
 
-        private const string FilePath = "Settings";
-        private static Settings PrivateInstance;
-
-        [JsonProperty] 
-        public string RootFolderName;
+        private const string RESOURCES_PATH = "RegistrySettings";
+        private static RegistrySettings PrivateInstance;
 
         [JsonProperty]
         public string ProjectManifestPath;
 
         [JsonProperty] 
-        public string LicenseFileName;
+        public string LicenseResourcePath;
 
         [JsonProperty]
         public RegistryInfo Registry;
@@ -67,26 +65,35 @@ namespace HTC.UPMRegistryTool.Editor.Configs
         public string RegistryHost;
         public int RegistryPort;
 
-        public static Settings Instance()
+        public static RegistrySettings Instance()
         {
             if (PrivateInstance == null)
             {
-                TextAsset jsonAsset = Resources.Load<TextAsset>(FilePath);
+                TextAsset jsonAsset = Resources.Load<TextAsset>(RESOURCES_PATH);
                 if (jsonAsset)
                 {
                     string settingString = jsonAsset.ToString();
-                    PrivateInstance = JsonConvert.DeserializeObject<Settings>(settingString);
+                    PrivateInstance = JsonConvert.DeserializeObject<RegistrySettings>(settingString);
                 }
                 else
                 {
-                    Debug.LogErrorFormat("Settings.json not found. ({0})", FilePath);
-                    PrivateInstance = new Settings();
+                    Debug.LogErrorFormat("RegistrySettings.json not found. ({0})", RESOURCES_PATH);
+                    PrivateInstance = new RegistrySettings();
                 }
 
                 PrivateInstance.Init();
             }
 
             return PrivateInstance;
+        }
+
+        public string GetLicenseURL()
+        {
+            Object fileObj = Resources.Load(LicenseResourcePath);
+            string assetPath = AssetDatabase.GetAssetPath(fileObj);
+            string fullPath = Path.GetFullPath(assetPath);
+
+            return "file://" + fullPath;
         }
 
         private void Init()
@@ -96,7 +103,7 @@ namespace HTC.UPMRegistryTool.Editor.Configs
 
             int port = 0;
             RegistryPort = 80;
-            if (Int32.TryParse(match.Groups[2].Value, out port))
+            if (int.TryParse(match.Groups[2].Value, out port))
             {
                 RegistryPort = port;
             }

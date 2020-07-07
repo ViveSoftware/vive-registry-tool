@@ -1,5 +1,5 @@
 ﻿using HTC.UPMRegistryTool.Editor.Configs;
-using HTC.UPMRegistryTool.Editor.System;
+using HTC.UPMRegistryTool.Editor.Utils;
 using System;
 using System.IO;
 using System.Net.Sockets;
@@ -112,11 +112,11 @@ namespace HTC.UPMRegistryTool.Editor.UI
             UITemplate.CloneTree(rootVisualElement);
 
             Label registryUrlLabel = rootVisualElement.Query<Label>("RegistryUrlLabel").First();
-            registryUrlLabel.text = Settings.Instance().Registry.Url;
+            registryUrlLabel.text = RegistrySettings.Instance().Registry.Url;
 
             Label registryScopesLabel = rootVisualElement.Query<Label>("RegistryScopesLabel").First();
             string strScopes = "";
-            foreach (string strScope in Settings.Instance().Registry.Scopes)
+            foreach (string strScope in RegistrySettings.Instance().Registry.Scopes)
             {
                 if (!string.IsNullOrEmpty(strScopes))
                 {
@@ -191,16 +191,7 @@ namespace HTC.UPMRegistryTool.Editor.UI
 
         private void OnTermsButtonClicked()
         {
-            string[] paths = Directory.GetDirectories("Assets/", Settings.Instance().RootFolderName, SearchOption.AllDirectories);
-            if (paths == null || paths.Length == 0)
-            {
-                Debug.LogWarning("Failed to find root folder of HTC UPM Registry Tool (" + Settings.Instance().RootFolderName + ")");
-                return;
-            }
-
-            string rootFolderPath = Path.GetFullPath(paths[0]);
-            string licenseFileURL = "file://" + rootFolderPath + "/" + Settings.Instance().LicenseFileName;
-            Application.OpenURL(licenseFileURL);
+            Application.OpenURL(RegistrySettings.Instance().GetLicenseURL());
         }
 
         private void UpdateAddButtonEnabled()
@@ -256,8 +247,8 @@ namespace HTC.UPMRegistryTool.Editor.UI
 
         private bool CheckRegistryConnection()
         {
-            string host = Settings.Instance().RegistryHost;
-            int port = Settings.Instance().RegistryPort;
+            string host = RegistrySettings.Instance().RegistryHost;
+            int port = RegistrySettings.Instance().RegistryPort;
             
             try
             {

@@ -4,7 +4,7 @@ using HTC.Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
 
-namespace HTC.UPMRegistryTool.Editor.System
+namespace HTC.UPMRegistryTool.Editor.Utils
 {
     public static class ManifestUtils
     {
@@ -19,8 +19,8 @@ namespace HTC.UPMRegistryTool.Editor.System
             IList<JToken> registries = (IList<JToken>) manifestJson["scopedRegistries"];
             foreach (JToken registryToken in registries)
             {
-                Settings.RegistryInfo registry = JsonConvert.DeserializeObject<Settings.RegistryInfo>(registryToken.ToString());
-                if (Settings.Instance().Registry.Equals(registry))
+                RegistrySettings.RegistryInfo registry = JsonConvert.DeserializeObject<RegistrySettings.RegistryInfo>(registryToken.ToString());
+                if (RegistrySettings.Instance().Registry.Equals(registry))
                 {
                     return true;
                 }
@@ -40,7 +40,7 @@ namespace HTC.UPMRegistryTool.Editor.System
 
             // Add registry
             IList<JToken> registries = (IList<JToken>) manifestJson["scopedRegistries"];
-            JToken newToken = JToken.Parse(JsonConvert.SerializeObject(Settings.Instance().Registry));
+            JToken newToken = JToken.Parse(JsonConvert.SerializeObject(RegistrySettings.Instance().Registry));
             registries.Add(newToken);
             
             SaveProjectManifest(manifestJson.ToString());
@@ -64,8 +64,8 @@ namespace HTC.UPMRegistryTool.Editor.System
             for (int i = registries.Count - 1; i >= 0 ; i--)
             {
                 JToken registryToken = registries[i];
-                Settings.RegistryInfo registry = JsonConvert.DeserializeObject<Settings.RegistryInfo>(registryToken.ToString());
-                if (registry.Name == Settings.Instance().Registry.Name)
+                RegistrySettings.RegistryInfo registry = JsonConvert.DeserializeObject<RegistrySettings.RegistryInfo>(registryToken.ToString());
+                if (registry.Name == RegistrySettings.Instance().Registry.Name)
                 {
                     registries.RemoveAt(i);
                 }
@@ -74,7 +74,7 @@ namespace HTC.UPMRegistryTool.Editor.System
 
         private static JObject LoadProjectManifest()
         {
-            string manifestString = File.ReadAllText(Settings.Instance().ProjectManifestPath);
+            string manifestString = File.ReadAllText(RegistrySettings.Instance().ProjectManifestPath);
             JObject manifestJson = JObject.Parse(manifestString);
 
             return manifestJson;
@@ -82,7 +82,7 @@ namespace HTC.UPMRegistryTool.Editor.System
 
         private static void SaveProjectManifest(string content)
         {
-            File.WriteAllText(Settings.Instance().ProjectManifestPath, content);
+            File.WriteAllText(RegistrySettings.Instance().ProjectManifestPath, content);
         }
     }
 }

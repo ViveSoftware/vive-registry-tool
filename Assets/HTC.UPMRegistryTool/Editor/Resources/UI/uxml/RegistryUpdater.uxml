@@ -6,7 +6,7 @@
     <VisualElement class="content">
       <Label class="body" text="Do you want to add HTC's package registry URL to your project?" />
       <Label class="body" text="By adding the registry url in your 'Packages/manifest.json', you can discover, install, update or remove the packages from HTC in the package manager window." />
-      <Label class="body" text="You can always find this window in the menu later: 'Window > HTC > HTC UPM Registry Tool'" />
+      <Label class="body" text="You can always find this window in the menu later: 'Window/HTC/HTC UPM Registry Tool'" />
     </VisualElement>
     <VisualElement class="status-set">
       <VisualElement class="status">
