@@ -32,10 +32,6 @@
     </VisualElement>
     <VisualElement class="options">
       <Toggle name="AutoCheck" text=" Auto Check"/>
-      <Toggle name="AcceptTerms" text=" I have read and accept the terms and conditions"/>
-    </VisualElement>
-    <VisualElement class="buttons">
-      <Button name="Terms" text="View Terms and Conditions" />
     </VisualElement>
     <VisualElement class="buttons">
       <Button name="Add" text="Add" />

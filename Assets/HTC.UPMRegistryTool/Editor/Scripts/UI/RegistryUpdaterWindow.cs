@@ -26,7 +26,6 @@ namespace HTC.UPMRegistryTool.Editor.UI
         [SerializeField] private VisualTreeAsset UITemplate = null;
         
         private Toggle AutoCheckToggle;
-        private Toggle AcceptTermsToggle;
         private Label RegistryStatusLabel;
         private Label ConnectionStatusLabel;
         private Button AddButton;
@@ -132,10 +131,6 @@ namespace HTC.UPMRegistryTool.Editor.UI
             AutoCheckToggle.RegisterCallback<MouseUpEvent>(OnAutoCheckToggled);
             AutoCheckToggle.value = UserSettings.Instance().AutoCheckEnabled;
 
-            AcceptTermsToggle = rootVisualElement.Query<Toggle>("AcceptTerms").First();
-            AcceptTermsToggle.RegisterCallback<MouseUpEvent>(OnAcceptTermsToggled);
-            AcceptTermsToggle.value = UserSettings.Instance().TermsAccepted;
-
             RegistryStatusLabel = rootVisualElement.Query<Label>("RegistryStatusLabel").First();
             ConnectionStatusLabel = rootVisualElement.Query<Label>("ConnectionStatusLabel").First();
 
@@ -149,9 +144,6 @@ namespace HTC.UPMRegistryTool.Editor.UI
 
             Button closeButton = rootVisualElement.Query<Button>("Close").First();
             closeButton.clickable.clicked += OnCloseButtonClicked;
-
-            Button termsButton = rootVisualElement.Query<Button>("Terms").First();
-            termsButton.clickable.clicked += OnTermsButtonClicked;
         }
 
         private void OnAutoCheckToggled(MouseUpEvent mouseUpEvent)
@@ -161,7 +153,6 @@ namespace HTC.UPMRegistryTool.Editor.UI
 
         private void OnAcceptTermsToggled(MouseUpEvent mouseUpEvent)
         {
-            UserSettings.Instance().SetTermsAccepted(AcceptTermsToggle.value);
             UpdateAddButtonEnabled();
         }
 
@@ -196,8 +187,7 @@ namespace HTC.UPMRegistryTool.Editor.UI
 
         private void UpdateAddButtonEnabled()
         {
-            bool enabled = UserSettings.Instance().TermsAccepted && !ManifestUtils.CheckRegistryExists();
-            AddButton.SetEnabled(enabled);
+            AddButton.SetEnabled(!ManifestUtils.CheckRegistryExists());
         }
 
         private void UpdateRemoveButtonEnabled()
