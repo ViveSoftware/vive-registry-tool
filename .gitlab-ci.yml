@@ -26,19 +26,19 @@ variables:
   after_script:
     - *unity_return_license
 
-editor:2019.1-asset:
+editor:2019.1:
   <<: *unity_template
   stage: editor
   variables:
     IMAGE_TAG: '2019.1.14f1-windows'
 
-editor:2019.4-asset:
+editor:2019.4:
   <<: *unity_template
   stage: editor
   variables:
     IMAGE_TAG: '2019.4.2f1-windows'
 
-editor:2020.1b-asset:
+editor:2020.1b:
   <<: *unity_template
   stage: editor
   variables:
