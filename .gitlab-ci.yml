@@ -27,19 +27,19 @@ variables:
     - *unity_return_license
 
 editor:2019.1-asset:
-  <<: *no_asmdef_unity_editor_template
+  <<: *unity_template
   stage: editor
   variables:
     IMAGE_TAG: '2019.1.14f1-windows'
 
 editor:2019.4-asset:
-  <<: *no_asmdef_unity_editor_template
+  <<: *unity_template
   stage: editor
   variables:
     IMAGE_TAG: '2019.4.2f1-windows'
 
 editor:2020.1b-asset:
-  <<: *no_asmdef_unity_editor_template
+  <<: *unity_template
   stage: editor
   variables:
     IMAGE_TAG: '2020.1.0b14-windows'
