@@ -1,55 +1,92 @@
 stages:
-  - export
-  - build-2019.1
-  - build-2019.2
-  - build-2019.3
+  - editor
 
 variables:
   UNITY_COMMAND: "xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' /opt/Unity/Editor/Unity -batchmode -nographics -logfile /dev/stdout -quit"
-  EXPORT_PACKAGE_PATH: "Builds/HTCPackagesBootstrapper.unitypackage"
-  NEW_PROJECT_PATH: "/NewProject"
 
-.unity_activate: &unity_activate |-
-  eval ${UNITY_COMMAND} -username "${UNITY_EMAIL}" -password "${UNITY_PASSWORD}" -serial "${UNITY_SERIAL}" -createProject "${NEW_PROJECT_PATH}"
+.unity_activate: &unity_activate
+  eval ${UNITY_COMMAND} -username "${UNITY_EMAIL}" -password "${UNITY_PASSWORD}" -serial "${UNITY_SERIAL}"
 
-.unity_return_license: &unity_return_license |-
-  eval ${UNITY_COMMAND} -returnLicense -projectPath "${NEW_PROJECT_PATH}"
+.unity_return_license: &unity_return_license
+  eval ${UNITY_COMMAND} -returnLicense
 
-.unity_job_template: &unity_job_template
+.unity_template: &unity_template
   image: gableroux/unity3d:${IMAGE_TAG}
-  only:
-    - master
-    - merge_requests
+  cache:
+    key: "${CI_PROJECT_ID}-${CI_COMMIT_REF_SLUG}-${CI_JOB_NAME}"
+    paths:
+     - "Library/"
+
+  script:
+    - eval ${UNITY_COMMAND} -projectPath='.'
+
+  after_script:
+    - *unity_return_license
+
+.unity_editor_template: &unity_editor_template
+  <<: *unity_template
 
   before_script:
     - *unity_activate
 
-  script:
-    - echo 'Hi'
-  
-  after_script:
-    - *unity_return_license
+.no_asmdef_unity_editor_template: &no_asmdef_unity_editor_template
+  <<: *unity_template
 
-export:unitypackage:
-  <<: *unity_job_template
-  stage: export
-  variables:
-    IMAGE_TAG: '2019.3.7f1-windows'
+  before_script:
+    - find './Assets/HTC.UnityPlugin/' -type f -name '*.asmdef*' -delete 
+    - find './Assets/HTC.UnityPlugin/' -type f -name '*.asmref*' -delete
+    - *unity_activate
 
-build:windows-2019.1:
-  <<: *unity_job_template
-  stage: build-2019.1
+editor:5.6.3-asset:
+  <<: *no_asmdef_unity_editor_template
+  stage: editor
   variables:
-    IMAGE_TAG: '2019.1.13f1-windows'
+    IMAGE_TAG: '5.6.3f1'
 
-build:windows-2019.2:
-  <<: *unity_job_template
-  stage: build-2019.2
+editor:2017.4-asset:
+  <<: *no_asmdef_unity_editor_template
+  stage: editor
   variables:
-    IMAGE_TAG: '2019.2.20f1-windows'
+    IMAGE_TAG: '2017.4.27f1-windows'
 
-build:windows-2019.3:
-  <<: *unity_job_template
-  stage: build-2019.3
+editor:2018.2-asset:
+  <<: *no_asmdef_unity_editor_template
+  stage: editor
   variables:
-    IMAGE_TAG: '2019.3.7f1-windows'
+    IMAGE_TAG: '2018.2.21f1-windows'
+    
+editor:2018.4-asset:
+  <<: *no_asmdef_unity_editor_template
+  stage: editor
+  variables:
+    IMAGE_TAG: '2018.4.24f1-windows'
+
+editor:2019.1-asset:
+  <<: *no_asmdef_unity_editor_template
+  stage: editor
+  variables:
+    IMAGE_TAG: '2019.1.14f1-windows'
+
+editor:2019.4-asset:
+  <<: *no_asmdef_unity_editor_template
+  stage: editor
+  variables:
+    IMAGE_TAG: '2019.4.2f1-windows'
+
+editor:2020.1b-asset:
+  <<: *no_asmdef_unity_editor_template
+  stage: editor
+  variables:
+    IMAGE_TAG: '2020.1.0b14-windows'
+
+editor:2019.4-package:
+  <<: *unity_editor_template
+  stage: editor
+  variables:
+    IMAGE_TAG: '2019.4.2f1-windows'
+
+editor:2020.1b-package:
+  <<: *unity_editor_template
+  stage: editor
+  variables:
+    IMAGE_TAG: '2020.1.0b14-windows'
