@@ -158,7 +158,7 @@ namespace HTC.UPMRegistryTool.Editor.UI
 
         private void OnAddButtonClicked()
         {
-            ManifestUtils.UpdateRegistryToManifest();
+            ManifestUtils.AddRegistry(RegistrySettings.Instance().Registry);
             ShowPackageManager();
             UpdateAddButtonEnabled();
             UpdateRemoveButtonEnabled();
@@ -167,7 +167,7 @@ namespace HTC.UPMRegistryTool.Editor.UI
 
         private void OnRemoveButtonClicked()
         {
-            ManifestUtils.RemoveRegistryFromManifest();
+            ManifestUtils.RemoveRegistry(RegistrySettings.Instance().Registry.Name);
             UserSettings.Instance().SetAutoCheckEnabled(false);
             AutoCheckToggle.value = false;
             UpdateAddButtonEnabled();
@@ -187,12 +187,12 @@ namespace HTC.UPMRegistryTool.Editor.UI
 
         private void UpdateAddButtonEnabled()
         {
-            AddButton.SetEnabled(!ManifestUtils.CheckRegistryExists());
+            AddButton.SetEnabled(!ManifestUtils.CheckRegistryExists(RegistrySettings.Instance().Registry));
         }
 
         private void UpdateRemoveButtonEnabled()
         {
-            RemoveButton.SetEnabled(ManifestUtils.CheckRegistryExists());
+            RemoveButton.SetEnabled(ManifestUtils.CheckRegistryExists(RegistrySettings.Instance().Registry));
         }
 
         private void UpdateAllStatus()
@@ -206,7 +206,7 @@ namespace HTC.UPMRegistryTool.Editor.UI
             RegistryStatusLabel.RemoveFromClassList(StatusSuccessClass);
             RegistryStatusLabel.RemoveFromClassList(StatusErrorClass);
 
-            if (ManifestUtils.CheckRegistryExists())
+            if (ManifestUtils.CheckRegistryExists(RegistrySettings.Instance().Registry))
             {
                 RegistryStatusLabel.AddToClassList(StatusSuccessClass);
                 RegistryStatusLabel.text = RegistryStatusSuccessString;

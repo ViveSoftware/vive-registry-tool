@@ -18,7 +18,7 @@ namespace HTC.UPMRegistryTool.Editor.System
 
         private static void UpdateOnce()
         {
-            if (!ManifestUtils.CheckRegistryExists())
+            if (!ManifestUtils.CheckRegistryExists(RegistrySettings.Instance().Registry))
             {
                 RegistryUpdaterWindow.Open();
             }

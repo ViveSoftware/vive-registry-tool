@@ -8,7 +8,7 @@ namespace HTC.UPMRegistryTool.Editor.Utils
 {
     public static class ManifestUtils
     {
-        public static bool CheckRegistryExists()
+        public static bool CheckRegistryExists(RegistrySettings.RegistryInfo registryInfo)
         {
             JObject manifestJson = LoadProjectManifest();
             if (!manifestJson.ContainsKey("scopedRegistries"))
@@ -16,11 +16,11 @@ namespace HTC.UPMRegistryTool.Editor.Utils
                 return false;
             }
 
-            IList<JToken> registries = (IList<JToken>) manifestJson["scopedRegistries"];
-            foreach (JToken registryToken in registries)
+            IList<JToken> registries = (IList<JToken>)manifestJson["scopedRegistries"];
+            foreach (JToken regToken in registries)
             {
-                RegistrySettings.RegistryInfo registry = JsonConvert.DeserializeObject<RegistrySettings.RegistryInfo>(registryToken.ToString());
-                if (RegistrySettings.Instance().Registry.Equals(registry))
+                RegistrySettings.RegistryInfo regInfo = JsonConvert.DeserializeObject<RegistrySettings.RegistryInfo>(regToken.ToString());
+                if (registryInfo.Equals(regInfo))
                 {
                     return true;
                 }
@@ -29,47 +29,43 @@ namespace HTC.UPMRegistryTool.Editor.Utils
             return false;
         }
 
-        public static void UpdateRegistryToManifest()
+        public static void AddRegistry(RegistrySettings.RegistryInfo registryInfo)
         {
+            RemoveRegistry(registryInfo.Name);
+
             JObject manifestJson = LoadProjectManifest();
-            RemoveRegistry(manifestJson);
             if (!manifestJson.ContainsKey("scopedRegistries"))
             {
                 manifestJson.Add("scopedRegistries", new JArray());
             }
 
-            // Add registry
-            IList<JToken> registries = (IList<JToken>) manifestJson["scopedRegistries"];
-            JToken newToken = JToken.Parse(JsonConvert.SerializeObject(RegistrySettings.Instance().Registry));
+            IList<JToken> registries = (IList<JToken>)manifestJson["scopedRegistries"];
+            JToken newToken = JToken.Parse(JsonConvert.SerializeObject(registryInfo));
             registries.Add(newToken);
-            
+
             SaveProjectManifest(manifestJson.ToString());
         }
 
-        public static void RemoveRegistryFromManifest()
+        public static void RemoveRegistry(string registryName)
         {
             JObject manifestJson = LoadProjectManifest();
-            RemoveRegistry(manifestJson);
-            SaveProjectManifest(manifestJson.ToString());
-        }
-
-        private static void RemoveRegistry(JObject json)
-        {
-            if (!json.ContainsKey("scopedRegistries"))
+            if (!manifestJson.ContainsKey("scopedRegistries"))
             {
                 return;
             }
 
-            IList<JToken> registries = (IList<JToken>) json["scopedRegistries"];
-            for (int i = registries.Count - 1; i >= 0 ; i--)
+            IList<JToken> registries = (IList<JToken>)manifestJson["scopedRegistries"];
+            for (int i = registries.Count - 1; i >= 0; i--)
             {
                 JToken registryToken = registries[i];
                 RegistrySettings.RegistryInfo registry = JsonConvert.DeserializeObject<RegistrySettings.RegistryInfo>(registryToken.ToString());
-                if (registry.Name == RegistrySettings.Instance().Registry.Name)
+                if (registry.Name == registryName)
                 {
                     registries.RemoveAt(i);
                 }
             }
+
+            SaveProjectManifest(manifestJson.ToString());
         }
 
         private static JObject LoadProjectManifest()
