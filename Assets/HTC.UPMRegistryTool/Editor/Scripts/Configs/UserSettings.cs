@@ -9,10 +9,10 @@ namespace HTC.UPMRegistryTool.Editor.Configs
         private static UserSettings PrivateInstance;
 
         [JsonProperty]
-        public bool AutoCheckEnabled = true;
+        public bool AutoCheckEnabled;
 
         [JsonProperty] 
-        public bool TermsAccepted = false;
+        public bool TermsAccepted;
 
         public static UserSettings Instance()
         {
