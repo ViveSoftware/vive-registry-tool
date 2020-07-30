@@ -5,11 +5,11 @@ namespace HTC.UPMRegistryTool.Editor.Configs
 {
     public class UserSettings
     {
-        private const string FilePath = "Temp/HTCUPMRegistryToolUserSettings.json";
+        private const string FilePath = "UserSettings/HTCUPMRegistryToolUserSettings.json";
         private static UserSettings PrivateInstance;
 
         [JsonProperty]
-        public bool AutoCheckEnabled;
+        public bool AutoCheckEnabled = true;
 
         [JsonProperty] 
         public bool TermsAccepted;
@@ -48,6 +48,7 @@ namespace HTC.UPMRegistryTool.Editor.Configs
         private void Save()
         {
             string contentString = JsonConvert.SerializeObject(this);
+            Directory.CreateDirectory(Path.GetDirectoryName(FilePath));
             File.WriteAllText(FilePath, contentString);
         }
     }
