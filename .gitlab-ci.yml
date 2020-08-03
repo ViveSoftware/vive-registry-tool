@@ -38,8 +38,8 @@ editor:2019.4:
   variables:
     IMAGE_TAG: '2019.4.2f1-windows'
 
-editor:2020.1b:
+editor:2020.1:
   <<: *unity_template
   stage: editor
   variables:
-    IMAGE_TAG: '2020.1.0b14-windows'
+    IMAGE_TAG: '2020.1.0f1-windows'
