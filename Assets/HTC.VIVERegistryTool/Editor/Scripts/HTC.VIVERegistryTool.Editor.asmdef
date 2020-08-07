@@ -1,6 +1,7 @@
 {
-    "name": "HTC.UPMRegistryTool.Editor",
+    "name": "HTC.VIVERegistryTool.Editor",
     "references": [],
+    "optionalUnityReferences": [],
     "includePlatforms": [
         "Editor"
     ],
@@ -12,6 +13,5 @@
     ],
     "autoReferenced": false,
     "defineConstraints": [],
-    "versionDefines": [],
-    "noEngineReferences": false
+    "versionDefines": []
 }

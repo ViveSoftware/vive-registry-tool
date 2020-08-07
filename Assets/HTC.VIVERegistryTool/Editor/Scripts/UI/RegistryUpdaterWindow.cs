@@ -1,18 +1,17 @@
-﻿using HTC.UPMRegistryTool.Editor.Configs;
-using HTC.UPMRegistryTool.Editor.Utils;
-using System;
-using System.IO;
+﻿using System;
 using System.Net.Sockets;
 using System.Reflection;
+using HTC.VIVERegistryTool.Editor.Configs;
+using HTC.VIVERegistryTool.Editor.Utils;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace HTC.UPMRegistryTool.Editor.UI
+namespace HTC.VIVERegistryTool.Editor.UI
 {
     public class RegistryUpdaterWindow : EditorWindow
     {
-        private static readonly Vector2 WindowSize = new Vector2(520.0f, 360.0f);
+        private static readonly Vector2 WindowSize = new Vector2(540.0f, 360.0f);
         private static readonly string StatusSuccessClass = "success";
         private static readonly string StatusErrorClass = "error";
         private static readonly string RegistryStatusSuccessString = "Added";
@@ -31,10 +30,10 @@ namespace HTC.UPMRegistryTool.Editor.UI
         private Button AddButton;
         private Button RemoveButton;
 
-        [MenuItem("Window/HTC/HTC Package Registry Tool")]
+        [MenuItem("Window/VIVE/VIVE Registry Tool")]
         public static void Open()
         {
-            RegistryUpdaterWindow window = GetWindow<RegistryUpdaterWindow>(true, "HTC UPM Registry Tool");
+            RegistryUpdaterWindow window = GetWindow<RegistryUpdaterWindow>(true, "VIVE Registry Tool");
             window.minSize = WindowSize;
             window.maxSize = WindowSize;
             window.UpdateAllStatus();

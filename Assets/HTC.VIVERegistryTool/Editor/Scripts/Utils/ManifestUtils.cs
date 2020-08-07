@@ -1,10 +1,10 @@
-﻿using HTC.UPMRegistryTool.Editor.Configs;
-using HTC.Newtonsoft.Json;
+﻿using HTC.Newtonsoft.Json;
 using HTC.Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
+using HTC.VIVERegistryTool.Editor.Configs;
 
-namespace HTC.UPMRegistryTool.Editor.Utils
+namespace HTC.VIVERegistryTool.Editor.Utils
 {
     public static class ManifestUtils
     {

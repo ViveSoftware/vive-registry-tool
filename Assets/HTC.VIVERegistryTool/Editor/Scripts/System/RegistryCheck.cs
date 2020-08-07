@@ -1,9 +1,9 @@
-﻿using HTC.UPMRegistryTool.Editor.Configs;
-using HTC.UPMRegistryTool.Editor.UI;
-using HTC.UPMRegistryTool.Editor.Utils;
+﻿using HTC.VIVERegistryTool.Editor.Configs;
+using HTC.VIVERegistryTool.Editor.UI;
+using HTC.VIVERegistryTool.Editor.Utils;
 using UnityEditor;
 
-namespace HTC.UPMRegistryTool.Editor.System
+namespace HTC.VIVERegistryTool.Editor.System
 {
     [InitializeOnLoad]
     public class RegistryCheck

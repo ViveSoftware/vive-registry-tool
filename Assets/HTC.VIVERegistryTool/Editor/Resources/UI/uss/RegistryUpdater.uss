@@ -5,14 +5,14 @@
 
 .left-column {
 	align-items: center;
-	flex-grow: 1;
+	flex-grow: 2;
 	flex-shrink: 1;
-	padding: 5px;
+	padding: 11px 5px;
 }
 
 .right-column {
-	flex-grow: 2;
-	flex-shrink: 3;
+	flex-grow: 3;
+	flex-shrink: 15;
 	padding: 5px;
 }
 
@@ -61,7 +61,7 @@
 }
 
 #logo {
-	--unity-image: resource("HTC");
+	--unity-image: resource("VIVE");
 }
 
 .success {

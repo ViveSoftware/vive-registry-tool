@@ -1,11 +1,11 @@
 ﻿using HTC.Newtonsoft.Json;
 using System.IO;
 
-namespace HTC.UPMRegistryTool.Editor.Configs
+namespace HTC.VIVERegistryTool.Editor.Configs
 {
     public class UserSettings
     {
-        private const string FilePath = "UserSettings/HTCUPMRegistryToolUserSettings.json";
+        private const string FilePath = "UserSettings/VIVERegistryUserSettings.json";
         private static UserSettings PrivateInstance;
 
         [JsonProperty]

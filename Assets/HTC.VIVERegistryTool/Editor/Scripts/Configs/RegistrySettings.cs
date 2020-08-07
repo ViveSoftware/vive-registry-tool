@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 
-namespace HTC.UPMRegistryTool.Editor.Configs
+namespace HTC.VIVERegistryTool.Editor.Configs
 {
     public class RegistrySettings
     {
