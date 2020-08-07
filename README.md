@@ -18,7 +18,7 @@ Learn more about [VIVE registry]().
 Download the `*.unitypackage` from one of the following sources:
 
 - [Unity Asset Store]()
-- [GitHub]()
+- [GitHub](https://github.com/ViveSoftware/vive-registry-tool/releases)
 
 Open your project, click `Assets/Import Package/Custom Package` in the menu, or drag the `*.unitypackage` onto your Unity editor, to import it.
 
@@ -26,7 +26,7 @@ Open your project, click `Assets/Import Package/Custom Package` in the menu, or 
 
 After importing, the following window will show up automatically.
 
-![](https://i.imgur.com/Amf3kHj.png)
+![](https://i.imgur.com/nhjZmuv.png)
 
 After adding the URL, Unity package manager will be automatically opened. Wait for it to refresh the package list then you’re ready to discover the packages from VIVE.
 
