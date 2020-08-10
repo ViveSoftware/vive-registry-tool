@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.0.0] - 2020-08-10
+
 ### Added
 
 - Window to add or remove VIVE registry
