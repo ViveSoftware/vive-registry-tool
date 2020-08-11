@@ -7,7 +7,7 @@ After VIVE registry has been added, you can install packages from VIVE in Unity 
 - VIVE Input Utility
 - Wave XR Plugin
 
-Learn more about [VIVE registry]().
+Learn more about [VIVE registry](https://developer.vive.com/resources/knowledgebase/vive-registry/).
 
 ## Requirements
 
