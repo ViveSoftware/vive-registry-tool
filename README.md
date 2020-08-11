@@ -52,5 +52,5 @@ Only in Unity 2020.1 and newer, packages from scoped registries will be listed i
 
 ## Contact
 
-- [Issue Report](https://github.com/ViveSoftware/vive-registry-tool/issues)
+- [Reporting Issues](https://github.com/ViveSoftware/vive-registry-tool/issues)
 - email: ViveSoftware@htc.com 
