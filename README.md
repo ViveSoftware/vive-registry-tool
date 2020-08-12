@@ -17,7 +17,7 @@ Learn more about [VIVE registry](https://developer.vive.com/resources/knowledgeb
 
 Download the `*.unitypackage` from one of the following sources:
 
-- [Unity Asset Store]()
+- [Unity Asset Store](http://u3d.as/1Z1N)
 - [GitHub](https://github.com/ViveSoftware/vive-registry-tool/releases)
 
 Open your project, click `Assets/Import Package/Custom Package` in the menu, or drag the `*.unitypackage` onto your Unity editor, to import it.
