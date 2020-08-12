@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Replace Json.NET with SimpleJSON which is more light-weighted
+- Integrate UserSettings into RegistrySettings
+- Change the format of RegistrySettings to ScriptableObject from json for more convenient editing in editor
+
+### Removed
+
+- Redundant internal codes for license accepting procedure
+
 ## [1.0.0] - 2020-08-10
 
 ### Added

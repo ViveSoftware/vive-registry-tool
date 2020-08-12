@@ -1,99 +1,39 @@
-﻿using HTC.Newtonsoft.Json;
-using HTC.Newtonsoft.Json.Serialization;
-using System.Collections.Generic;
-using System.IO;
+﻿using HTC.VIVERegistryTool.Editor.Utils;
+using System;
 using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 
 namespace HTC.VIVERegistryTool.Editor.Configs
 {
-    public class RegistrySettings
+    public class RegistrySettings : ScriptableObject
     {
-        public struct RegistryInfo
-        {
-            [JsonProperty("name")]
-            public string Name;
-
-            [JsonProperty("url")]
-            public string Url;
-
-            [JsonProperty("scopes")]
-            public IList<string> Scopes;
-
-            public bool Equals(RegistryInfo otherInfo)
-            {
-                if (Name != otherInfo.Name || Url != otherInfo.Url)
-                {
-                    return false;
-                }
-
-                if (Scopes == null || otherInfo.Scopes == null)
-                {
-                    return false;
-                }
-
-                if (Scopes.Count != otherInfo.Scopes.Count)
-                {
-                    return false;
-                }
-
-                for (int i = 0; i < Scopes.Count; i++)
-                {
-                    if (Scopes[i] != otherInfo.Scopes[i])
-                    {
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-        }
-
         private const string RESOURCES_PATH = "RegistrySettings";
+
         private static RegistrySettings PrivateInstance;
 
-        [JsonProperty]
         public string ProjectManifestPath;
-
-        [JsonProperty] 
-        public string LicenseResourcePath;
-
-        [JsonProperty]
+        public bool AutoCheckEnabled = true;
         public RegistryInfo Registry;
 
-        public string RegistryHost;
-        public int RegistryPort;
+        [NonSerialized] public string RegistryHost;
+        [NonSerialized] public int RegistryPort;
 
         public static RegistrySettings Instance()
         {
             if (PrivateInstance == null)
             {
-                TextAsset jsonAsset = Resources.Load<TextAsset>(RESOURCES_PATH);
-                if (jsonAsset)
-                {
-                    string settingString = jsonAsset.ToString();
-                    PrivateInstance = JsonConvert.DeserializeObject<RegistrySettings>(settingString);
-                }
-                else
-                {
-                    Debug.LogErrorFormat("RegistrySettings.json not found. ({0})", RESOURCES_PATH);
-                    PrivateInstance = new RegistrySettings();
-                }
-
+                PrivateInstance = Resources.Load<RegistrySettings>(RESOURCES_PATH);
                 PrivateInstance.Init();
             }
 
             return PrivateInstance;
         }
 
-        public string GetLicenseURL()
+        public void SetAutoCheckEnabled(bool enabled)
         {
-            Object fileObj = Resources.Load(LicenseResourcePath);
-            string assetPath = AssetDatabase.GetAssetPath(fileObj);
-            string fullPath = Path.GetFullPath(assetPath);
-
-            return "file://" + fullPath;
+            AutoCheckEnabled = enabled;
+            EditorUtility.SetDirty(this);
         }
 
         private void Init()
@@ -101,9 +41,8 @@ namespace HTC.VIVERegistryTool.Editor.Configs
             Match match = Regex.Match(Registry.Url, @"^https?:\/\/(.+?)(?::(\d+))?\/?$");
             RegistryHost = match.Groups[1].Value;
 
-            int port = 0;
             RegistryPort = 80;
-            if (int.TryParse(match.Groups[2].Value, out port))
+            if (int.TryParse(match.Groups[2].Value, out int port))
             {
                 RegistryPort = port;
             }

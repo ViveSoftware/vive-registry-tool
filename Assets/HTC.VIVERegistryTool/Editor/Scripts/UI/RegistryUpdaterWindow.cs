@@ -1,8 +1,8 @@
-﻿using System;
+﻿using HTC.VIVERegistryTool.Editor.Configs;
+using HTC.VIVERegistryTool.Editor.Utils;
+using System;
 using System.Net.Sockets;
 using System.Reflection;
-using HTC.VIVERegistryTool.Editor.Configs;
-using HTC.VIVERegistryTool.Editor.Utils;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -128,7 +128,7 @@ namespace HTC.VIVERegistryTool.Editor.UI
 
             AutoCheckToggle = rootVisualElement.Query<Toggle>("AutoCheck").First();
             AutoCheckToggle.RegisterCallback<MouseUpEvent>(OnAutoCheckToggled);
-            AutoCheckToggle.value = UserSettings.Instance().AutoCheckEnabled;
+            AutoCheckToggle.value = RegistrySettings.Instance().AutoCheckEnabled;
 
             RegistryStatusLabel = rootVisualElement.Query<Label>("RegistryStatusLabel").First();
             ConnectionStatusLabel = rootVisualElement.Query<Label>("ConnectionStatusLabel").First();
@@ -147,12 +147,7 @@ namespace HTC.VIVERegistryTool.Editor.UI
 
         private void OnAutoCheckToggled(MouseUpEvent mouseUpEvent)
         {
-            UserSettings.Instance().SetAutoCheckEnabled(AutoCheckToggle.value);
-        }
-
-        private void OnAcceptTermsToggled(MouseUpEvent mouseUpEvent)
-        {
-            UpdateAddButtonEnabled();
+            RegistrySettings.Instance().SetAutoCheckEnabled(AutoCheckToggle.value);
         }
 
         private void OnAddButtonClicked()
@@ -167,7 +162,7 @@ namespace HTC.VIVERegistryTool.Editor.UI
         private void OnRemoveButtonClicked()
         {
             ManifestUtils.RemoveRegistry(RegistrySettings.Instance().Registry.Name);
-            UserSettings.Instance().SetAutoCheckEnabled(false);
+            RegistrySettings.Instance().SetAutoCheckEnabled(false);
             AutoCheckToggle.value = false;
             UpdateAddButtonEnabled();
             UpdateRemoveButtonEnabled();
@@ -177,11 +172,6 @@ namespace HTC.VIVERegistryTool.Editor.UI
         private void OnCloseButtonClicked()
         {
             Close();
-        }
-
-        private void OnTermsButtonClicked()
-        {
-            Application.OpenURL(RegistrySettings.Instance().GetLicenseURL());
         }
 
         private void UpdateAddButtonEnabled()

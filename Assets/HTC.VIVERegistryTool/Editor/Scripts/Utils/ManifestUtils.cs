@@ -1,25 +1,26 @@
-﻿using HTC.Newtonsoft.Json;
-using HTC.Newtonsoft.Json.Linq;
-using System.Collections.Generic;
+﻿using HTC.VIVERegistryTool.Editor.Configs;
+using HTC.VIVERegistryTool.Editor.Utils.SimpleJSON;
 using System.IO;
-using HTC.VIVERegistryTool.Editor.Configs;
 
 namespace HTC.VIVERegistryTool.Editor.Utils
 {
     public static class ManifestUtils
     {
-        public static bool CheckRegistryExists(RegistrySettings.RegistryInfo registryInfo)
+        public const string SCOPED_REGISTRIES_KEY = "scopedRegistries";
+        public const int JSON_INDENT_SPACE_COUNT = 2;
+
+        public static bool CheckRegistryExists(RegistryInfo registryInfo)
         {
-            JObject manifestJson = LoadProjectManifest();
-            if (!manifestJson.ContainsKey("scopedRegistries"))
+            JSONObject manifestJson = LoadProjectManifest();
+            if (!manifestJson.HasKey(SCOPED_REGISTRIES_KEY))
             {
                 return false;
             }
 
-            IList<JToken> registries = (IList<JToken>)manifestJson["scopedRegistries"];
-            foreach (JToken regToken in registries)
+            JSONArray registries = manifestJson[SCOPED_REGISTRIES_KEY].AsArray;
+            foreach (JSONNode regNode in registries)
             {
-                RegistrySettings.RegistryInfo regInfo = JsonConvert.DeserializeObject<RegistrySettings.RegistryInfo>(regToken.ToString());
+                RegistryInfo regInfo = RegistryInfo.FromJson(regNode.AsObject);
                 if (registryInfo.Equals(regInfo))
                 {
                     return true;
@@ -29,56 +30,55 @@ namespace HTC.VIVERegistryTool.Editor.Utils
             return false;
         }
 
-        public static void AddRegistry(RegistrySettings.RegistryInfo registryInfo)
+        public static void AddRegistry(RegistryInfo registryInfo)
         {
             RemoveRegistry(registryInfo.Name);
 
-            JObject manifestJson = LoadProjectManifest();
-            if (!manifestJson.ContainsKey("scopedRegistries"))
+            JSONObject manifestJson = LoadProjectManifest();
+            if (!manifestJson.HasKey(SCOPED_REGISTRIES_KEY))
             {
-                manifestJson.Add("scopedRegistries", new JArray());
+                manifestJson.Add(SCOPED_REGISTRIES_KEY, new JSONArray());
             }
 
-            IList<JToken> registries = (IList<JToken>)manifestJson["scopedRegistries"];
-            JToken newToken = JToken.Parse(JsonConvert.SerializeObject(registryInfo));
-            registries.Add(newToken);
+            JSONArray registries = manifestJson[SCOPED_REGISTRIES_KEY].AsArray;
+            registries.Add(registryInfo.ToJson());
 
-            SaveProjectManifest(manifestJson.ToString());
+            Save(manifestJson);
         }
 
         public static void RemoveRegistry(string registryName)
         {
-            JObject manifestJson = LoadProjectManifest();
-            if (!manifestJson.ContainsKey("scopedRegistries"))
+            JSONObject manifestJson = LoadProjectManifest();
+            if (!manifestJson.HasKey(SCOPED_REGISTRIES_KEY))
             {
                 return;
             }
 
-            IList<JToken> registries = (IList<JToken>)manifestJson["scopedRegistries"];
+            JSONArray registries = manifestJson[SCOPED_REGISTRIES_KEY].AsArray;
             for (int i = registries.Count - 1; i >= 0; i--)
             {
-                JToken registryToken = registries[i];
-                RegistrySettings.RegistryInfo registry = JsonConvert.DeserializeObject<RegistrySettings.RegistryInfo>(registryToken.ToString());
-                if (registry.Name == registryName)
+                RegistryInfo reg = RegistryInfo.FromJson(registries[i].AsObject);
+                if (reg.Name == registryName)
                 {
-                    registries.RemoveAt(i);
+                    registries.Remove(i);
                 }
             }
 
-            SaveProjectManifest(manifestJson.ToString());
+            Save(manifestJson);
         }
 
-        private static JObject LoadProjectManifest()
+        private static JSONObject LoadProjectManifest()
         {
             string manifestString = File.ReadAllText(RegistrySettings.Instance().ProjectManifestPath);
-            JObject manifestJson = JObject.Parse(manifestString);
+            JSONObject manifestJson = JSONNode.Parse(manifestString).AsObject;
 
             return manifestJson;
         }
 
-        private static void SaveProjectManifest(string content)
+        private static void Save(JSONObject newJson)
         {
-            File.WriteAllText(RegistrySettings.Instance().ProjectManifestPath, content);
+            string jsonString = newJson.ToString(JSON_INDENT_SPACE_COUNT);
+            File.WriteAllText(RegistrySettings.Instance().ProjectManifestPath, jsonString);
         }
     }
 }
