@@ -7,6 +7,7 @@
 - Replace Json.NET with SimpleJSON which is more light-weighted
 - Integrate UserSettings into RegistrySettings
 - Change the format of RegistrySettings to ScriptableObject from json for more convenient editing in editor
+- Prevent auto checking while transiting to play mode
 
 ### Removed
 

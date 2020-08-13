@@ -10,7 +10,7 @@ namespace HTC.VIVERegistryTool.Editor.System
     {
         static RegistryCheck()
         {
-            if (EditorApplication.isUpdating)
+            if (EditorApplication.isPlayingOrWillChangePlaymode || EditorApplication.isUpdating)
             {
                 return;
             }
