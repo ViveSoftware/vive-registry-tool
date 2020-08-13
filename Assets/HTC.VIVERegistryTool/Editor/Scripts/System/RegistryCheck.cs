@@ -10,6 +10,11 @@ namespace HTC.VIVERegistryTool.Editor.System
     {
         static RegistryCheck()
         {
+            if (EditorApplication.isUpdating)
+            {
+                return;
+            }
+            
             if (RegistrySettings.Instance().AutoCheckEnabled)
             {
                 EditorApplication.update += UpdateOnce;

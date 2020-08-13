@@ -12,6 +12,10 @@
 
 - Redundant internal codes for license accepting procedure
 
+### Fixed
+
+- `NullReferenceException` during importing the VIVE Registry Tool
+
 ## [1.0.0] - 2020-08-10
 
 ### Added
