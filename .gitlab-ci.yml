@@ -1,8 +1,12 @@
 stages:
   - editor
+  - build
 
 variables:
   UNITY_COMMAND: "xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' /opt/Unity/Editor/Unity -batchmode -nographics -logfile /dev/stdout -quit"
+  BUILD_SCENE_PATH: 'Assets/Scenes/TestScene.unity'
+  BUILD_OUTPUT_FOLDER: 'Builds/Win64'
+  BUILD_OUTPUT_NAME: 'Test.exe'
 
 .unity_activate: &unity_activate
   eval ${UNITY_COMMAND} -username "${UNITY_EMAIL}" -password "${UNITY_PASSWORD}" -serial "${UNITY_SERIAL}"
@@ -26,6 +30,18 @@ variables:
   after_script:
     - *unity_return_license
 
+.build_win64_unity_template: &build_win64_unity_template
+  <<: *unity_template
+
+  artifacts:
+    name: 'Win64'
+    expire_in: 1 day
+    paths:
+      - ${BUILD_OUTPUT_FOLDER}
+
+  script:
+    - eval ${UNITY_COMMAND} -projectPath='.' -executeMethod HTC.VIVERegistryTool.Editor.CI.BuildUtils.Build ${BUILD_SCENE_PATH} ${BUILD_OUTPUT_FOLDER}/${BUILD_OUTPUT_NAME} 'StandaloneWindows64'
+
 editor:2019.1:
   <<: *unity_template
   stage: editor
@@ -41,5 +57,23 @@ editor:2019.4:
 editor:2020.1:
   <<: *unity_template
   stage: editor
+  variables:
+    IMAGE_TAG: '2020.1.0f1-windows'
+
+build:2019.1:
+  <<: *unity_template
+  stage: build
+  variables:
+    IMAGE_TAG: '2019.1.14f1-windows'
+
+build:2019.4:
+  <<: *unity_template
+  stage: build
+  variables:
+    IMAGE_TAG: '2019.4.2f1-windows'
+
+build:2020.1:
+  <<: *unity_template
+  stage: build
   variables:
     IMAGE_TAG: '2020.1.0f1-windows'
