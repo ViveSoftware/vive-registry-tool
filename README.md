@@ -1,5 +1,7 @@
 # VIVE Registry Tool
 
+![](https://i.imgur.com/wSJoP22.png)
+
 VIVE Registry Tool lets your project access packages from VIVE by editing the `Packages/manifest.json` in your project, adding VIVE registry as a [scoped registry](https://docs.unity3d.com/Manual/upm-scoped.html).
 
 After VIVE registry has been added, you can install packages from VIVE in Unity package manager, including:

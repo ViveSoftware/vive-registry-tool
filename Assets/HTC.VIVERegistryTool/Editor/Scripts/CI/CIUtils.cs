@@ -5,7 +5,6 @@ using UnityEditor;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
 
-
 namespace HTC.VIVERegistryTool.Editor.CI
 {
     public static class BuildUtils
