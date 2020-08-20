@@ -26,7 +26,7 @@ Open your project, click `Assets/Import Package/Custom Package` in the menu, or 
 
 ![](https://i.imgur.com/vF0OsZf.png)
 
-After importing, the following window will show up automatically.
+After importing, the following window will show up automatically. If not, you can find this window in the menu `Window/VIVE/VIVE Registry Tool`.
 
 ![](https://i.imgur.com/nhjZmuv.png)
 
