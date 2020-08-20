@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+### Fixed
+
+- It's very likely to fail to popup after being imported
+
 ## [1.1.0] - 2020-08-19
 
 ### Changed
