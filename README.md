@@ -48,7 +48,7 @@ If you want to see packages in preview, remember to check `Show preview packages
 
 ### Switching to My Registries
 
-Only in Unity 2020.1 and newer, packages from scoped registries will be listed in another place called `My Registries`.
+In Unity 2019.4.6 and newer, packages from scoped registries will be listed in another place called `My Registries`.
 
 ![](https://i.imgur.com/gAWlUAF.png)
 
