@@ -10,25 +10,32 @@ namespace HTC.VIVERegistryTool.Editor.System
     {
         static RegistryCheck()
         {
-            if (EditorApplication.isPlayingOrWillChangePlaymode || EditorApplication.isUpdating)
+            if (EditorApplication.isPlayingOrWillChangePlaymode)
             {
                 return;
             }
-            
-            if (RegistrySettings.Instance().AutoCheckEnabled)
-            {
-                EditorApplication.update += UpdateOnce;
-            }
+
+            EditorApplication.update += OnUpdate;
         }
 
-        private static void UpdateOnce()
+        private static void OnUpdate()
         {
-            if (!ManifestUtils.CheckRegistryExists(RegistrySettings.Instance().Registry))
+            if (EditorApplication.isUpdating)
             {
+                return;
+            }
+
+            if (!RegistrySettings.Instance())
+            {
+                return;
+            }
+
+            if (RegistrySettings.Instance().AutoCheckEnabled && !ManifestUtils.CheckRegistryExists(RegistrySettings.Instance().Registry))
+            { 
                 RegistryUpdaterWindow.Open();
             }
 
-            EditorApplication.update -= UpdateOnce;
+            EditorApplication.update -= OnUpdate;
         }
     }
 }

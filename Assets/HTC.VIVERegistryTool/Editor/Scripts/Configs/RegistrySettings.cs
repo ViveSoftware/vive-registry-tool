@@ -24,7 +24,10 @@ namespace HTC.VIVERegistryTool.Editor.Configs
             if (PrivateInstance == null)
             {
                 PrivateInstance = Resources.Load<RegistrySettings>(RESOURCES_PATH);
-                PrivateInstance.Init();
+                if (PrivateInstance)
+                {
+                    PrivateInstance.Init();
+                }
             }
 
             return PrivateInstance;
